@@ -56,8 +56,9 @@ def build_tidy_panel(msi_df, ff_df):
     df["dp_ratio"] = df["div_ttm"] / df["price_index"]
     df["log_dp"] = np.log(df["dp_ratio"])
 
-    # The dependent variable: excess market return.
-    df["ret_excess"] = df["vwretd"] - df["rf"]
+    # Continuously compounded excess return, as in Stambaugh's Table 1 note:
+    # log(1+R_market) - log(1+R_f)
+    df["ret_excess"] = np.log1p(df["vwretd"]) - np.log1p(df["rf"])
 
     cols = ["date", "vwretd", "vwretx", "rf", "ret_excess", "totval",
             "price_index", "div_monthly", "div_ttm", "dp_ratio", "log_dp"]
