@@ -16,6 +16,7 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from scipy import stats
 
 from settings import config
 from calc_predictor_data import load_tidy_panel
@@ -57,6 +58,13 @@ def fit_subsample(panel, start, end, predictor="dp_ratio"):
     s_vv = v @ v / (T - 2)
     s_uv = u @ v / (T - 2)
 
+    # Naive OLS standard error of beta and one-sided p-value (beta=0 vs beta>0),
+    # i.e. what a standard regression printout would report (Table 1, Part B).
+    x_dm = x_lag - x_lag.mean()
+    se_beta = np.sqrt(s_uu / (x_dm @ x_dm))
+    t_stat = coef_b[1] / se_beta
+    p_naive = 1.0 - stats.norm.cdf(t_stat)
+
     return {
         "beta_hat": coef_b[1],
         "T": T,
@@ -65,6 +73,8 @@ def fit_subsample(panel, start, end, predictor="dp_ratio"):
         "sigma2_v_x1e4": s_vv * 1e4,
         "sigma_uv_x1e4": s_uv * 1e4,
         "corr_uv": s_uv / np.sqrt(s_uu * s_vv),
+        "se_beta_naive": se_beta,
+        "p_naive": p_naive,
     }
 
 
