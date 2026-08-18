@@ -123,6 +123,35 @@ def task_clean_data():
         "clean": [],
     }
 
+def task_table_01():
+    """Build Table 1 (Parts A/B/C) as LaTeX."""
+    return {
+        "actions": ["python ./src/create_table_01.py"],
+        "targets": [OUTPUT_DIR / "table_01.tex"],
+        "file_dep": [
+            "./src/create_table_01.py",
+            "./src/create_table_01_partC.py",
+            "./src/monte_carlo.py",
+            DATA_DIR / "predictor_panel.parquet",
+        ],
+        "clean": True,
+    }
+
+
+def task_figure_01():
+    """Build Figure 1 (beta vs rho by method and subsample)."""
+    return {
+        "actions": ["python ./src/create_figure_01.py"],
+        "targets": [OUTPUT_DIR / "figure_01.png"],
+        "file_dep": [
+            "./src/create_figure_01.py",
+            "./src/stambaugh_bias.py",
+            "./src/create_table_01_partC.py",
+            DATA_DIR / "predictor_panel.parquet",
+        ],
+        "clean": True,
+    }
+
 # def task_summary_stats():
 #     """Generate summary statistics tables"""
 #     file_dep = ["./src/example_table.py"]
