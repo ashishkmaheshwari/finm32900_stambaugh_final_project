@@ -194,6 +194,27 @@ def task_table_02_updated():
         ],
         "clean": True,
     }
+
+def task_notebook():
+    """Execute the walkthrough notebook and export it to HTML."""
+    nb_py = "./src/01_walkthrough.ipynb.py"
+    nb = "./src/01_walkthrough.ipynb"
+    return {
+        "actions": [
+            f"jupytext --to notebook --output {nb} {nb_py}",
+            f"jupyter nbconvert --execute --to notebook --inplace {nb}",
+            f"jupyter nbconvert --to html --output-dir={OUTPUT_DIR} {nb}",
+        ],
+        "targets": [OUTPUT_DIR / "01_walkthrough.html"],
+        "file_dep": [
+            nb_py,
+            DATA_DIR / "predictor_panel.parquet",
+            "./src/create_table_01.py",
+            "./src/create_table_02.py",
+            "./src/create_figure_01.py",
+        ],
+        "clean": True,
+    }
 # def task_summary_stats():
 #     """Generate summary statistics tables"""
 #     file_dep = ["./src/example_table.py"]
