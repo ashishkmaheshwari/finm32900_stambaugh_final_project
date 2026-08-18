@@ -14,7 +14,8 @@ import pandas as pd
 
 from settings import config
 from calc_predictor_data import load_tidy_panel
-from create_table_01_partC import SUBSAMPLES
+import sys
+from create_table_01_partC import SUBSAMPLES, UPDATE_SUBSAMPLES
 from bayesian import posterior_moments, sample_posterior
 from create_table_01 import format_partAB   # reuse the paper-style formatter
 
@@ -38,13 +39,13 @@ def _window_arrays(panel, start, end):
     return r[1:], x[:-1], x[1:]
 
 
-def build_table_02(panel=None, n_draws=N_DRAWS, seed=SEED):
+def build_table_02(panel=None, n_draws=N_DRAWS, seed=SEED, subsamples=SUBSAMPLES):
     """Return (partA, partB) posterior-moment frames, one column per subsample."""
     if panel is None:
         panel = load_tidy_panel()
 
     colsA, colsB = {}, {}
-    for name, (start, end) in SUBSAMPLES.items():
+    for name, (start, end) in subsamples.items():
         r_next, x_lag, x_next = _window_arrays(panel, start, end)
         a = sample_posterior(r_next, x_lag, x_next, n_draws=n_draws, seed=seed)
         b = sample_posterior(r_next, x_lag, x_next, n_draws=n_draws, seed=seed,
@@ -64,7 +65,11 @@ def _format(part):
 
 
 if __name__ == "__main__":
-    partA, partB = build_table_02()
+    updated = "--updated" in sys.argv
+    subsamples = UPDATE_SUBSAMPLES if updated else SUBSAMPLES
+    suffix = "_updated" if updated else ""
+
+    partA, partB = build_table_02(subsamples=subsamples)
     print("\nA. Conditional likelihood, rho unrestricted:")
     print(_format(partA).to_string())
     print("\nB. Conditional likelihood, rho in (-1, 1):")
@@ -90,7 +95,7 @@ if __name__ == "__main__":
             "questions and disagree about how much evidence of predictability "
             "the sample contains."
         ),
-        label="tab:table2",
+        label=f"tab:table2{suffix}",
     )
-    (OUTPUT_DIR / "table_02.tex").write_text(latex)
-    print(f"\nWrote {OUTPUT_DIR / 'table_02.tex'}")
+    (OUTPUT_DIR / f"table_02{suffix}.tex").write_text(latex)
+    print(f"\nWrote {OUTPUT_DIR / f"table_02{suffix}.tex"}")

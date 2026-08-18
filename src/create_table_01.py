@@ -15,7 +15,8 @@ import pandas as pd
 
 from settings import config
 from calc_predictor_data import load_tidy_panel
-from create_table_01_partC import SUBSAMPLES, fit_subsample
+import sys
+from create_table_01_partC import SUBSAMPLES, UPDATE_SUBSAMPLES, fit_subsample
 from monte_carlo import simulate_slopes, summarize_distribution, true_pvalue
 
 OUTPUT_DIR = Path(config("OUTPUT_DIR"))
@@ -24,13 +25,13 @@ N_SIMS = 20_000
 SEED = 42
 
 
-def build_table_01(panel=None, n_sims=N_SIMS, seed=SEED):
-    """Return (partA, partC) DataFrames, one column per subsample."""
+def build_table_01(panel=None, n_sims=N_SIMS, seed=SEED, subsamples=SUBSAMPLES):
+    """Return (partA, partB, partC) DataFrames, one column per subsample."""
     if panel is None:
         panel = load_tidy_panel()
 
     partC_cols, partA_cols, partB_cols = {}, {}, {}
-    for name, (start, end) in SUBSAMPLES.items():
+    for name, (start, end) in subsamples.items():
         c = fit_subsample(panel, start, end)
         partC_cols[name] = c
 
@@ -101,7 +102,11 @@ def format_partAB(part):
     return pd.DataFrame(rows).T
 
 if __name__ == "__main__":
-    partA, partB, partC = build_table_01()
+    updated = "--updated" in sys.argv
+    subsamples = UPDATE_SUBSAMPLES if updated else SUBSAMPLES
+    suffix = "_updated" if updated else ""
+
+    partA, partB, partC = build_table_01(subsamples=subsamples)
 
     print("Part A (simulated, true beta = 0):")
     print(partA.round(4).to_string())
@@ -120,6 +125,9 @@ if __name__ == "__main__":
     latex = combined.to_latex(
         escape=False,
         caption=(
+            " Samples are extended through the most recently available data; "
+            "1997--2024 lies entirely outside Stambaugh's original sample."
+            if updated else
             "Finite-sample properties of the OLS predictive slope "
             "(replication of Stambaugh 1999, Table 1). "
             "Part A reports the simulated distribution of the OLS slope when "
@@ -138,7 +146,7 @@ if __name__ == "__main__":
             "where the naive test rejects no-predictability at 1.4\\% while "
             "the finite-sample test cannot reject it at 16.5\\%."
         ),
-        label="tab:table1",
+        label=f"tab:table1{suffix}",
     )
-    (OUTPUT_DIR / "table_01.tex").write_text(latex)
-    print(f"\nWrote {OUTPUT_DIR / 'table_01.tex'}")
+    (OUTPUT_DIR / f"table_01{suffix}.tex").write_text(latex)
+    print(f"\nWrote {OUTPUT_DIR / f"table_01{suffix}.tex"}")

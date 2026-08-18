@@ -30,6 +30,14 @@ SUBSAMPLES = {
     "1977-1996": ("1977-01-01", "1996-12-31"),
 }
 
+# Updated samples: the paper's structure extended to the most recent data.
+# 1997-2024 is entirely out of sample relative to Stambaugh (1999).
+UPDATE_SUBSAMPLES = {
+    "1927-2024": ("1927-01-01", "2024-12-31"),
+    "1952-2024": ("1952-01-01", "2024-12-31"),
+    "1997-2024": ("1997-01-01", "2024-12-31"),
+    "2005-2024": ("2005-01-01", "2024-12-31"),
+}
 
 def ols(y, X):
     """OLS with intercept; returns (coefs, residuals)."""

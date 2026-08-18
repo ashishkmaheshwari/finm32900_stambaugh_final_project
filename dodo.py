@@ -152,6 +152,48 @@ def task_figure_01():
         "clean": True,
     }
 
+def task_table_02():
+    """Build Table 2 (Bayesian posteriors, specs A and B) as LaTeX."""
+    return {
+        "actions": ["python ./src/create_table_02.py"],
+        "targets": [OUTPUT_DIR / "table_02.tex"],
+        "file_dep": [
+            "./src/create_table_02.py",
+            "./src/bayesian.py",
+            "./src/create_table_01_partC.py",
+            DATA_DIR / "predictor_panel.parquet",
+        ],
+        "clean": True,
+    }
+
+def task_table_01_updated():
+    """Build Table 1 on samples extended through the most recent data."""
+    return {
+        "actions": ["python ./src/create_table_01.py --updated"],
+        "targets": [OUTPUT_DIR / "table_01_updated.tex"],
+        "file_dep": [
+            "./src/create_table_01.py",
+            "./src/create_table_01_partC.py",
+            "./src/monte_carlo.py",
+            DATA_DIR / "predictor_panel.parquet",
+        ],
+        "clean": True,
+    }
+
+
+def task_table_02_updated():
+    """Build Table 2 on samples extended through the most recent data."""
+    return {
+        "actions": ["python ./src/create_table_02.py --updated"],
+        "targets": [OUTPUT_DIR / "table_02_updated.tex"],
+        "file_dep": [
+            "./src/create_table_02.py",
+            "./src/bayesian.py",
+            "./src/create_table_01_partC.py",
+            DATA_DIR / "predictor_panel.parquet",
+        ],
+        "clean": True,
+    }
 # def task_summary_stats():
 #     """Generate summary statistics tables"""
 #     file_dep = ["./src/example_table.py"]
