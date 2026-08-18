@@ -10,11 +10,27 @@ assertion states the tolerance we claim: tight where the quantity is stable
 which is hypersensitive to rho near one).
 """
 
+
+
 import numpy as np
 import pytest
 
 from calc_predictor_data import load_tidy_panel
 from create_table_01_partC import SUBSAMPLES, fit_subsample
+
+from pathlib import Path
+
+from settings import config
+
+# The tidy panel is built from WRDS, which requires credentials that are
+# (correctly) not available in CI. Data-dependent tests skip when the panel
+# is absent; the simulation-based tests in test_monte_carlo.py always run.
+PANEL_PATH = Path(config("DATA_DIR")) / "predictor_panel.parquet"
+
+pytestmark = pytest.mark.skipif(
+    not PANEL_PATH.exists(),
+    reason="predictor panel not available (requires WRDS pull); run `doit` first",
+)
 
 # Paper values, Table 1 Part C, columns in SUBSAMPLES order.
 PAPER = {
