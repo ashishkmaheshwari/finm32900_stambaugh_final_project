@@ -102,6 +102,7 @@ coverage.xml
 
 # Sphinx documentation
 docs/
+!docs/playground.html
 /docs_src/apidocs
 
 
