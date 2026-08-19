@@ -25,7 +25,7 @@ data from CRSP, replicate the paper's Table 1, Table 2, and Figure 1 within a
 stated tolerance, and extend every exhibit through 2024. Our persistence
 estimates match the paper to the third decimal, our finite-sample $p$-value for
 1927--1996 is 0.177 against the paper's 0.17, and all sixteen Bayesian posterior
-cells match within roughly 0.02. Extending the sample, we find the problem the
+cells match within roughly 0.03. Extending the sample, we find the problem the
 paper identifies has grown more severe: in 1997--2024 the naive $p$-value is
 0.015 while the finite-sample $p$-value is 0.149, a tenfold gap.
 \end{abstract}
@@ -101,6 +101,10 @@ from the stock file is reported separately as a robustness check.
 
 \section{Replication results}
 
+Table~\ref{tab:table1} reports the finite-sample properties of the OLS
+predictive slope for each of the paper's four subsamples, in the paper's own
+three-part structure.
+
 \input{../_output/table_01.tex}
 
 Part C of Table~\ref{tab:table1} reproduces the paper's parameter estimates
@@ -134,6 +138,21 @@ mean and halves $P(\beta \le 0)$ from 0.28 to 0.11 (the paper reports 0.26 to
 0.13). The prior matters precisely where the data cannot identify persistence on
 their own.
 
+\begin{figure}[!ht]
+\centering
+\includegraphics[width=\textwidth]{../_output/figure_01.png}
+\caption{Estimates of $\beta$ and $\rho$ by subsample and method. In every panel
+the bias-adjusted estimate lies below and to the right of the OLS estimate:
+correcting the finite-sample bias simultaneously lowers the slope and raises the
+persistence, because both are manifestations of the same problem. The
+1977--1996 panel reproduces the paper's most extreme result---the bias-corrected
+persistence exceeds unity and the adjusted slope turns negative---which is the
+correction reporting that this short, near-unit-root sample cannot identify the
+parameters, and which is precisely the region the Bayesian stationarity
+restriction excludes by construction.}
+\label{fig:figure1}
+\end{figure}
+
 The exact likelihood in Parts C and D is nonlinear in $\rho$ and therefore not
 conjugate, so these two specifications are sampled by random-walk
 Metropolis-Hastings. The chain moves in an unconstrained parameterization---the
@@ -159,21 +178,6 @@ the paper to within about 0.03. Chains were run to effective sample sizes above
 200, which supports the means and tail probabilities to the two decimals
 reported; the higher moments should be read as indicative only.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\textwidth]{../_output/figure_01.png}
-\caption{Estimates of $\beta$ and $\rho$ by subsample and method. In every panel
-the bias-adjusted estimate lies below and to the right of the OLS estimate:
-correcting the finite-sample bias simultaneously lowers the slope and raises the
-persistence, because both are manifestations of the same problem. The
-1977--1996 panel reproduces the paper's most extreme result---the bias-corrected
-persistence exceeds unity and the adjusted slope turns negative---which is the
-correction reporting that this short, near-unit-root sample cannot identify the
-parameters, and which is precisely the region the Bayesian stationarity
-restriction excludes by construction.}
-\label{fig:figure1}
-\end{figure}
-
 Figure~\ref{fig:figure1} reproduces the geometry of the paper's Figure 1. Our
 bias-adjusted points correspond to the paper's ``F'' points and match closely:
 $(\rho, \beta) = (0.978, 0.14)$ against the paper's $(0.976, 0.145)$ for
@@ -185,7 +189,8 @@ $(\rho, \beta) = (0.978, 0.14)$ against the paper's $(0.976, 0.145)$ for
 
 \input{../_output/table_02_updated.tex}
 
-Three results stand out. First, the bias behaves as theory predicts: in the full
+Tables~\ref{tab:table1_updated} and~\ref{tab:table2_updated} repeat every
+exhibit on the extended samples. Three results stand out. First, the bias behaves as theory predicts: in the full
 sample $T$ rises from 834 to 1{,}170 months and the simulated bias falls from
 0.074 to 0.057, tracking the $1/T$ rate in equation~(\ref{eq:bias}).
 
@@ -203,9 +208,9 @@ Third, the paper's warning binds more tightly today than in 1999. In 1997--2024
 the naive $p$-value is 0.015---conventionally significant---while the
 finite-sample $p$-value is 0.149. The gap is tenfold, against roughly threefold
 in the paper's own full sample, and the simulated bias of 0.567 is about 40\% of
-the estimated slope. The Bayesian posterior for the same window places only 1\%
-of its mass below zero, so the divergence between frameworks has widened as
-well. We also note that the stationarity restriction has become nearly
+the estimated slope. The Bayesian posterior for the same window places 1\% or 
+less of its mass below zero depending on the specification, so the divergence 
+between frameworks has widened as well. We also note that the stationarity restriction has become nearly
 irrelevant: the unrestricted sampler retains about 99\% of draws in every modern
 window, against 80\% in 1977--1996, because longer samples pin down $\rho$
 without help from the prior.

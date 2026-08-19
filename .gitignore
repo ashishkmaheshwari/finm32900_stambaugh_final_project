@@ -102,7 +102,6 @@ coverage.xml
 
 # Sphinx documentation
 docs/
-!docs/playground.html
 /docs_src/apidocs
 
 
@@ -250,3 +249,6 @@ src/z_scratch_project_template.ipynb
 *Thumbs.db
 
 src/z_scratch_pipeline_template.ipynb
+
+!docs/playground.html
+!docs/.nojekyll
