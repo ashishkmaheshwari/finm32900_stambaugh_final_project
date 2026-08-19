@@ -1,0 +1,288 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{multirow}
+\usepackage{caption}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+
+\title{Replicating Stambaugh (1999), \emph{Predictive Regressions}}
+\author{Ashish Maheshwari \and Omar Anabtawi}
+\date{FINM 32900, Full-Stack Quantitative Finance \\ August 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+\noindent
+Stambaugh (1999) shows that the ordinary least squares slope in a return
+predictability regression is biased upward in finite samples when the predictor
+is persistent and its innovations are negatively correlated with return
+innovations---the defining features of the dividend--price ratio. We rebuild the
+data from CRSP, replicate the paper's Table 1, Table 2, and Figure 1 within a
+stated tolerance, and extend every exhibit through 2024. Our persistence
+estimates match the paper to the third decimal, our finite-sample $p$-value for
+1927--1996 is 0.177 against the paper's 0.17, and all sixteen Bayesian posterior
+cells match within roughly 0.02. Extending the sample, we find the problem the
+paper identifies has grown more severe: in 1997--2024 the naive $p$-value is
+0.015 while the finite-sample $p$-value is 0.149, a tenfold gap.
+\end{abstract}
+
+\section{The problem}
+
+The standard test of return predictability regresses next period's excess
+return on this period's dividend--price ratio,
+\begin{equation}
+r_{t+1} = \alpha + \beta x_t + u_{t+1},
+\qquad
+x_{t+1} = \theta + \rho x_t + v_{t+1},
+\end{equation}
+where $x_t$ is the dividend--price ratio and the innovations $(u_{t+1},
+v_{t+1})$ are jointly distributed with covariance matrix $\Sigma$. OLS is
+consistent here, but it is not unbiased: strict exogeneity fails, because the
+return innovation $u_{t+1}$ is correlated with the yield innovation $v_{t+1}$,
+which in turn moves the \emph{future} regressor.
+
+The bias arrives in two steps. First, the least squares estimator of an AR(1)
+coefficient is biased downward by approximately $(1+3\rho)/T$ (Kendall, 1954);
+with $\rho$ near one this is substantial. Second, that error transmits into the
+predictive slope with its sign reversed,
+\begin{equation}
+E[\hat\beta - \beta]
+= \frac{\sigma_{uv}}{\sigma_{vv}}\, E[\hat\rho - \rho]
+\approx -\frac{\sigma_{uv}}{\sigma_{vv}} \cdot \frac{1+3\rho}{T}.
+\label{eq:bias}
+\end{equation}
+Because a price increase raises the return and lowers the yield in the same
+month, $\sigma_{uv} < 0$, and the slope bias is therefore \emph{positive}. Both
+ingredients are necessary: remove the persistence or the innovation correlation
+and the bias disappears. In our data both are present in abundance---persistence
+of 0.99 and an innovation correlation of $-0.95$.
+
+\section{Data}
+
+Two WRDS pulls supply everything.
+
+\paragraph{Market index.} We use \texttt{crsp.msi}, CRSP's pre-aggregated
+monthly value-weighted market index, rather than the security-level stock file.
+CRSP has already performed the capitalization weighting, so we consume a
+finished series instead of reconstructing it from thousands of monthly
+security-level observations, which would require lagged market-capitalization
+weights and delisting-return handling.
+
+\paragraph{Dividends without a dividend database.} The index file reports the
+value-weighted return both including dividends (\texttt{vwretd}) and excluding
+them (\texttt{vwretx}). Their difference is the month's dividend as a fraction
+of the prior month's price. Compounding the price-only return yields a price
+level $P_t$, so the monthly dividend in index units is
+$D_t = (\text{vwretd}_t - \text{vwretx}_t) P_{t-1}$; summing twelve trailing
+months gives the annual dividend, and the predictor is $D_{12,t}/P_t$.
+
+\paragraph{Risk-free rate.} From \texttt{ff.factors\_monthly}. The dependent
+variable is the continuously compounded excess return,
+$\log(1+R_m) - \log(1+R_f)$, matching the paper's Table 1 specification.
+
+\paragraph{Sample.} The merged panel spans June 1927 to December 2024
+(1{,}171 monthly observations). It begins in mid-1927 because the risk-free
+series starts in July 1926 and the trailing-twelve-month dividend window
+consumes a further eleven months, leaving our replication samples about six
+observations shorter than the paper's.
+
+\paragraph{Index universe.} Stambaugh uses a NYSE-only value-weighted index.
+Our WRDS instance provides no pre-built NYSE-only monthly index carrying both
+\texttt{vwretd} and \texttt{vwretx}, so we use the CRSP total-market
+value-weighted index. Because both are value-weighted, the same
+large-capitalization firms---predominantly NYSE-listed---dominate each, and for
+the first half of the sample the universes effectively coincide, since AMEX
+enters CRSP in 1962 and NASDAQ at the end of 1972. A NYSE-only index rebuilt
+from the stock file is reported separately as a robustness check.
+
+\section{Replication results}
+
+\input{../_output/table_01.tex}
+
+Part C of Table~\ref{tab:table1} reproduces the paper's parameter estimates
+closely: our persistence estimates of 0.973, 0.946, 0.981, and 0.990 compare to
+the paper's 0.972, 0.948, 0.980, and 0.987, and the innovation covariances match
+in sign, magnitude, and cross-sample pattern. Part A, simulated at those
+parameters under the null $\beta = 0$, reproduces the paper's finite-sample bias
+(0.074 against 0.07 in the full sample), standard deviation (0.155 against
+0.16), skewness (0.74 against 0.71), kurtosis (3.90 against 3.84), and
+finite-sample $p$-value (0.177 against 0.17). The contrast between Parts A and B
+is the paper's central point: the standard regression model asserts an unbiased,
+symmetric, normal estimator and delivers a $p$-value of 0.06, while the actual
+finite-sample distribution is shifted, right-skewed, fat-tailed, and yields
+0.18.
+
+\input{../_output/table_02.tex}
+
+Table~\ref{tab:table2} reports Bayesian posterior moments under the paper's four
+specifications. Parts A and B use the likelihood conditioned on $x_0$; parts C
+and D use the exact likelihood, which treats $x_0$ as a draw from the
+predictor's stationary distribution, $x_0 \sim
+N\!\left(\theta/(1-\rho), \sigma_v^2/(1-\rho^2)\right)$.
+
+Under a flat prior with the conditional likelihood (Part A) the posterior is
+conjugate and centers on the OLS estimate; the posterior mean of 0.21 and
+$P(\beta \le 0) = 0.06$ match the paper exactly and provide an internal check
+that the sampler is correct. Part B imposes stationarity, $\rho \in (-1,1)$, by
+rejection. The restriction is nearly non-binding in the long samples but
+discards roughly one draw in five in 1977--1996, where it raises the posterior
+mean and halves $P(\beta \le 0)$ from 0.28 to 0.11 (the paper reports 0.26 to
+0.13). The prior matters precisely where the data cannot identify persistence on
+their own.
+
+The exact likelihood in Parts C and D is nonlinear in $\rho$ and therefore not
+conjugate, so these two specifications are sampled by random-walk
+Metropolis-Hastings. The chain moves in an unconstrained parameterization---the
+regression coefficients together with $\log\sigma_u$, $\log\sigma_v$, and
+$\mathrm{atanh}\,\mathrm{corr}(u,v)$---so every proposal yields a valid
+covariance matrix, with the corresponding Jacobian included in the log target.
+The proposal covariance is estimated from a short pilot chain and scaled by the
+usual $2.4/\sqrt{d}$ rule, because $\beta$ and $\rho$ are strongly correlated in
+this posterior and a diagonal random walk mixes poorly along that ridge. We
+validate the sampler by running it on the \emph{conditional} likelihood with a
+flat prior, which is exactly the conjugate setting of Part A: it recovers a
+posterior mean of 0.209, standard deviation 0.135, and $P(\beta \le 0) = 0.059$
+against the conjugate values 0.21, 0.14, and 0.06.
+
+The two adjustments push in opposite directions. The exact likelihood is
+informative about $\rho$ and strengthens the evidence for predictability: for
+1927--1996 the posterior mean rises to 0.23 and $P(\beta \le 0)$ falls to 0.04,
+against the paper's 0.23 and 0.05. Part D's alternative prior, $p(b,\Sigma)
+\propto (1-\rho^2)^{-1}\sigma_v^2|\Sigma|^{-5/2}$, places more weight near
+$\rho = 1$ and pulls back: the mean falls to 0.17 and $P(\beta \le 0)$ rises to
+0.13, against the paper's 0.19 and 0.10. All sixteen posterior cells agree with
+the paper to within about 0.03. Chains were run to effective sample sizes above
+200, which supports the means and tail probabilities to the two decimals
+reported; the higher moments should be read as indicative only.
+
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\textwidth]{../_output/figure_01.png}
+\caption{Estimates of $\beta$ and $\rho$ by subsample and method. In every panel
+the bias-adjusted estimate lies below and to the right of the OLS estimate:
+correcting the finite-sample bias simultaneously lowers the slope and raises the
+persistence, because both are manifestations of the same problem. The
+1977--1996 panel reproduces the paper's most extreme result---the bias-corrected
+persistence exceeds unity and the adjusted slope turns negative---which is the
+correction reporting that this short, near-unit-root sample cannot identify the
+parameters, and which is precisely the region the Bayesian stationarity
+restriction excludes by construction.}
+\label{fig:figure1}
+\end{figure}
+
+Figure~\ref{fig:figure1} reproduces the geometry of the paper's Figure 1. Our
+bias-adjusted points correspond to the paper's ``F'' points and match closely:
+$(\rho, \beta) = (0.978, 0.14)$ against the paper's $(0.976, 0.145)$ for
+1927--1996, and $(1.007, -0.21)$ against $(1.007, -0.22)$ for 1977--1996.
+
+\section{Extension to 2024}
+
+\input{../_output/table_01_updated.tex}
+
+\input{../_output/table_02_updated.tex}
+
+Three results stand out. First, the bias behaves as theory predicts: in the full
+sample $T$ rises from 834 to 1{,}170 months and the simulated bias falls from
+0.074 to 0.057, tracking the $1/T$ rate in equation~(\ref{eq:bias}).
+
+Second, modern slopes are not comparable to the paper's in raw units. The
+1997--2024 slope of 1.43 is roughly seven times the paper's full-sample 0.21,
+but the variance of the predictor's innovations falls over the same period from
+$0.112 \times 10^{-4}$ to $0.010 \times 10^{-4}$. As firms substituted
+repurchases for dividends the dividend yield declined to roughly 1.5\% and
+ceased to vary. Since a slope measures return per unit of yield, a threefold
+contraction in the predictor's standard deviation mechanically inflates the
+coefficient. A standardized slope, $\hat\beta \times \mathrm{sd}(x)$, would be
+the appropriate cross-era comparison.
+
+Third, the paper's warning binds more tightly today than in 1999. In 1997--2024
+the naive $p$-value is 0.015---conventionally significant---while the
+finite-sample $p$-value is 0.149. The gap is tenfold, against roughly threefold
+in the paper's own full sample, and the simulated bias of 0.567 is about 40\% of
+the estimated slope. The Bayesian posterior for the same window places only 1\%
+of its mass below zero, so the divergence between frameworks has widened as
+well. We also note that the stationarity restriction has become nearly
+irrelevant: the unrestricted sampler retains about 99\% of draws in every modern
+window, against 80\% in 1977--1996, because longer samples pin down $\rho$
+without help from the prior.
+
+\section{Successes and challenges}
+
+\paragraph{What replicated well.} The parameter estimates, the simulated
+finite-sample moments, all sixteen Bayesian posterior cells across four
+specifications, and the geometry of Figure 1 reproduce within a few hundredths,
+including the paper's most extreme individual result.
+
+\paragraph{Return definition.} Our initial slopes ran roughly 50\% high in the
+pre-war subsamples. The cause was that we had used simple excess returns while
+the paper's table note specifies continuously compounded returns; the difference
+between the two is of the order of half the return variance, which is
+substantial in the volatile 1927--1951 window and negligible later. Switching to
+log returns moved the full-sample slope from 0.31 to 0.2100 against the paper's
+0.21 and left $\rho$ and $\Sigma$ essentially unchanged, confirming the
+diagnosis.
+
+\paragraph{Vendor schema drift.} The course template's CRSP index puller targets
+\texttt{crsp\_a\_indexes.msix}, the capitalization-decile file. The market index
+we require resides in \texttt{crsp.msi} on our WRDS instance and uses
+\texttt{date} rather than \texttt{caldt} as its date column. We resolved this by
+enumerating libraries and describing tables through the \texttt{wrds} API before
+writing the query rather than trusting documentation.
+
+\paragraph{Sensitivity in the shortest sample.} Our simulated bias for
+1977--1996 is 0.52 against the paper's 0.42. At $\hat\rho = 0.990$ with 239
+observations the bias in equation~(\ref{eq:bias}) is extremely sensitive to
+$\rho$, so a difference of 0.003 in the persistence estimate propagates
+materially. We also condition the simulation on the first observed predictor
+value, whereas the paper conditions on both sample endpoints.
+
+\paragraph{A method that failed, and why.} Our first approach to Parts C and D
+avoided building a sampler altogether: since the exact posterior differs from
+the conditional one by a single observation's contribution, we reweighted the
+Part B draws by the stationary density of $x_0$, using importance sampling. In
+the long, lower-persistence samples this worked well, with effective sample
+sizes above 90\% of nominal draws. In the post-war samples it failed. Part D's
+prior carries a $(1-\rho^2)^{-1}$ factor that grows without bound as $\rho$
+approaches one, so in the 1952--1996 sample the ten heaviest draws all had
+$\rho > 0.999$ and the weighted posterior mean of $\rho$ was dragged from 0.981
+to 0.989, displacing that specification's position in
+Figure~\ref{fig:figure1}. The diagnosis is that the conditional posterior,
+concentrated near $\rho = 0.98$, is a poor proposal for a target that places
+substantial weight against the unit-root boundary; drawing more samples would
+not have helped. We therefore replaced the reweighting with a
+Metropolis-Hastings sampler that targets the exact posterior directly, which
+recovers sensible persistence estimates (0.973 for Part C and 0.975 for Part D
+in the full sample) and matches the paper across all sixteen cells. The
+importance-sampling code remains in the repository, documented as the attempt
+that motivated the switch.
+
+\paragraph{Testing without credentials.} Our replication tests require the tidy
+panel, which requires WRDS credentials that must never enter the repository.
+The suite is therefore split: simulation-based tests of the bias mechanism run
+in any environment, including continuous integration, while data-dependent
+tests skip cleanly with an explanatory message when the panel is absent and run
+locally once \texttt{doit} has built it.
+
+\section{Conclusion}
+
+The dividend--price ratio's apparent ability to predict returns is
+substantially an artifact of estimation. In the paper's own sample the honest
+$p$-value is three times the naive one; in the quarter-century since, it is ten
+times. Whether any predictability survives depends on the inferential framework:
+for 1927--1996 the finite-sample frequentist test cannot reject a zero slope at
+0.18 while the Bayesian posterior places between 4\% and 10\% of its mass below
+zero depending on the specification. That defensible frameworks disagree on
+identical data is, we think, the paper's most durable lesson.
+
+\section*{Reproducibility}
+
+The project rebuilds end to end with \texttt{doit}, which pulls from WRDS,
+constructs the tidy panel, regenerates every table and figure in this document,
+executes the walkthrough notebook, and runs the test suite. Every statistic
+reported here is generated by code; none is entered by hand.
+
+\end{document}

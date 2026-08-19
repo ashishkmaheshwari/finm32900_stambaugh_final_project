@@ -49,7 +49,12 @@ from monte_carlo import (
     true_pvalue,
 )
 from stambaugh_bias import bias_adjusted_slope, bias_correct_rho
-from bayesian import posterior_moments, sample_posterior
+from bayesian import (
+    exact_likelihood_log_weights,
+    posterior_moments,
+    sample_posterior,
+    weighted_moments,
+)
 
 panel = load_tidy_panel()
 print(f"{len(panel)} monthly observations, "
@@ -219,6 +224,8 @@ print(f"finite-sample p-value : {p_true:.4f}")
 #
 # ## 3. The replication
 #
+# ### Table 1: finite-sample properties of the OLS slope
+#
 # Table 1 assembles this for all four of the paper's subsamples. Part C reports
 # the parameters estimated from data; Part A simulates the null at those
 # parameters; Part B reports what the textbook regression model claims.
@@ -252,7 +259,89 @@ print(format_partC(partC).to_string())
 # bias is hypersensitive to $\rho$, and we condition the simulation on the first
 # observed predictor value rather than on both endpoints as the paper does.
 #
-# ### Figure 1: what the correction does
+# ### Table 2: the Bayesian view
+
+# %%
+from create_table_02 import build_table_02, _format
+
+t2 = build_table_02()
+targets = {
+    "A": "paper P(b<=0): 0.06/0.22/0.02/0.26",
+    "B": "paper P(b<=0): 0.06/0.22/0.01/0.13",
+    "C": "paper P(b<=0): 0.05/0.16/0.01/0.05",
+    "D": "paper P(b<=0): 0.10/0.28/0.05/0.16",
+}
+for spec in ("A", "B", "C", "D"):
+    print(f"\nSpec {spec}  ({targets[spec]})")
+    print(_format(t2[spec]).to_string())
+
+# %% [markdown]
+# Under a flat prior with the likelihood conditioned on $x_0$, the posterior is
+# conjugate and centers on the OLS estimate, so spec A's posterior mean equals
+# our OLS slope and its $P(\beta \le 0)$ tracks the naive p-value -- a useful
+# internal check that the sampler is right.
+#
+# Spec B imposes stationarity. It changes almost nothing in the long samples and
+# a great deal in 1977--1996, where roughly a fifth of the unrestricted draws
+# are explosive; ruling those out raises the posterior mean and halves
+# $P(\beta \le 0)$ from 0.28 to 0.11. The prior only matters when the data
+# cannot pin down persistence on their own.
+#
+# Specs C and D use the **exact** likelihood. Specs A and B condition on $x_0$
+# -- they treat the first yield observation as given -- but $x_0$ is data too,
+# drawn from the predictor's own stationary distribution,
+# $x_0 \sim N\!\left(\theta/(1-\rho),\; \sigma_v^2/(1-\rho^2)\right)$. Adding
+# that density is informative about $\rho$, and it is nonlinear in $\rho$, so
+# the posterior is no longer conjugate.
+#
+# Because the posterior is no longer conjugate, specs C and D are sampled by
+# random-walk Metropolis-Hastings. Two details make it work. The chain moves in
+# an unconstrained space -- the coefficients plus $\log\sigma_u$,
+# $\log\sigma_v$, and $\mathrm{atanh}\,\mathrm{corr}$ -- so every proposal gives
+# a valid covariance matrix, with the change-of-variables Jacobian added to the
+# log target. And the proposal covariance is estimated from a pilot chain rather
+# than guessed: $\beta$ and $\rho$ are strongly correlated in this posterior
+# (that correlation *is* the Stambaugh mechanism), so a diagonal random walk
+# crawls across a narrow ridge. With a matched proposal the chain accepts about
+# 25% of moves and reaches effective sample sizes above 200.
+#
+# We validate the sampler by pointing it at the *conditional* likelihood with a
+# flat prior -- exactly spec A, where the conjugate answer is known. It returns
+# a mean of 0.209, standard deviation 0.135, and $P(\beta \le 0) = 0.059$
+# against the conjugate 0.21, 0.14, and 0.06. Reproducing an exact answer is
+# what earns the right to trust the sampler where no exact answer exists.
+#
+# **What we tried first, and why it failed.** Before writing the sampler we
+# tried to reach C and D by reweighting the spec B draws by the stationary
+# density -- importance sampling, which is far cheaper. It works in the long
+# samples but breaks in the post-war ones: spec D's $(1-\rho^2)^{-1}$ prior
+# factor explodes as $\rho \to 1$, so in 1952--1996 the ten heaviest draws all
+# had $\rho > 0.999$ and the weighted mean of $\rho$ was dragged from 0.981 to
+# 0.989. The proposal never visits the region the target cares about, and more
+# draws would not fix it. That diagnosis is what motivated building the chain.
+#
+# The two adjustments push in opposite directions. The exact likelihood
+# strengthens the evidence for predictability: for 1927--1996 the posterior mean
+# rises from 0.21 to 0.23 and $P(\beta \le 0)$ falls from 0.06 to 0.04. Spec D's
+# prior, which places more weight near $\rho = 1$, pulls the other way: the mean
+# falls to 0.17 and $P(\beta \le 0)$ rises to 0.13. All sixteen posterior cells
+# match the paper within about 0.03.
+#
+# **The tension worth sitting with.** For 1927--1996 the finite-sample
+# frequentist p-value is 0.18 -- no rejection of "no predictability" -- while the
+# Bayesian posterior puts only 6% of its mass below zero. Both are correct, and
+# they answer different questions. The frequentist asks how often a
+# zero-slope world would produce a slope this large; the answer is "often,
+# because of the bias." The Bayesian asks how much belief lies below zero given
+# what was actually observed. The paper's contribution is not that
+# predictability is fake, but that the naive test overstates it while the two
+# honest frameworks disagree about what remains.
+#
+# ### Figure 1: what the corrections do
+#
+# Figure 1 collects the estimates from both frameworks in one picture: the
+# predictive slope plotted against the persistence estimate, for each subsample
+# and each method.
 
 # %%
 from create_figure_01 import build_figure_01
@@ -267,48 +356,10 @@ _ = build_figure_01()
 # striking result. The bias-corrected persistence exceeds one and the adjusted
 # slope turns negative. An explosive dividend yield is economically impossible,
 # so this is the correction announcing that 239 months of a near-unit-root
-# predictor simply cannot identify these parameters. It is also precisely why
-# the paper turns to Bayesian methods, where a stationarity prior can rule such
-# regions out by construction.
-#
-# ### Table 2: the Bayesian view
-
-# %%
-from create_table_02 import build_table_02, _format
-
-t2A, t2B = build_table_02()
-print("Spec A -- flat prior, conditional likelihood (paper P(b<=0): 0.06/0.22/0.02/0.26)")
-print(_format(t2A).to_string())
-print("\nSpec B -- with rho restricted to (-1, 1) (paper: 0.06/0.22/0.01/0.13)")
-print(_format(t2B).to_string())
-
-# %% [markdown]
-# Under a flat prior with the likelihood conditioned on $x_0$, the posterior is
-# conjugate and centers on the OLS estimate, so spec A's posterior mean equals
-# our OLS slope and its $P(\beta \le 0)$ tracks the naive p-value -- a useful
-# internal check that the sampler is right.
-#
-# Spec B imposes stationarity. It changes almost nothing in the long samples and
-# a great deal in 1977--1996, where roughly a fifth of the unrestricted draws
-# are explosive; ruling those out raises the posterior mean and halves
-# $P(\beta \le 0)$ from 0.28 to 0.11. The prior only matters when the data
-# cannot pin down persistence on their own.
-#
-# Specs C and D of the paper use the *exact* likelihood, treating $x_0$ as a
-# draw from the predictor's stationary distribution rather than as fixed. That
-# term is nonlinear in $\rho$ and breaks conjugacy, requiring Metropolis-Hastings
-# or importance reweighting; we discuss the approach in the report and leave it
-# as an extension.
-#
-# **The tension worth sitting with.** For 1927--1996 the finite-sample
-# frequentist p-value is 0.18 -- no rejection of "no predictability" -- while the
-# Bayesian posterior puts only 6% of its mass below zero. Both are correct, and
-# they answer different questions. The frequentist asks how often a
-# zero-slope world would produce a slope this large; the answer is "often,
-# because of the bias." The Bayesian asks how much belief lies below zero given
-# what was actually observed. The paper's contribution is not that
-# predictability is fake, but that the naive test overstates it while the two
-# honest frameworks disagree about what remains.
+# predictor simply cannot identify these parameters. That pathology is exactly
+# what the Bayesian stationarity restriction in Table 2 rules out by
+# construction -- and indeed spec B discards a fifth of the draws in precisely
+# this sample.
 
 # %% [markdown]
 # ## 4. Bringing it to the present
@@ -353,11 +404,10 @@ print(format_partC(partC_u).to_string())
 # estimated slope itself.
 
 # %%
-t2A_u, t2B_u = build_table_02(subsamples=UPDATE_SUBSAMPLES)
-print("Spec A -- updated samples")
-print(_format(t2A_u).to_string())
-print("\nSpec B -- updated samples, rho restricted")
-print(_format(t2B_u).to_string())
+t2_u = build_table_02(subsamples=UPDATE_SUBSAMPLES)
+for spec in ("A", "B", "C", "D"):
+    print(f"\nSpec {spec} -- updated samples")
+    print(_format(t2_u[spec]).to_string())
 
 # %% [markdown]
 # The Bayesian side sharpens the same tension. For 1997--2024 the posterior

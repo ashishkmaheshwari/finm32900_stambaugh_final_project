@@ -5,48 +5,80 @@ slope (Stambaugh 1999, Table 1 Part A).
 Simulates the two-equation system
     r_{t+1} = alpha + beta * x_t + u_{t+1}
     x_{t+1} = theta + rho  * x_t + v_{t+1},   (u,v) ~ N(0, Sigma) iid,
-and records the OLS beta_hat and rho_hat on each simulated sample. With
-sigma_uv < 0 and rho near 1, beta_hat is biased upward even when beta = 0:
-rho_hat is biased downward (Kendall), and E[beta_hat - beta] =
-(sigma_uv/sigma_vv) * E[rho_hat - rho] flips that bias's sign into the slope.
+and characterizes the OLS slope across simulated samples: bias, standard
+deviation, skewness, (raw) kurtosis, and the finite-sample "true" p-value --
+the fraction of null (beta = 0) simulations whose slope exceeds the slope
+observed in the real data.
+
+Implementation note: the simulation loops over TIME and carries all n_sims
+paths forward together as vectors, accumulating the OLS cross-products
+(sum x, sum x^2, sum x*y, ...) on the fly. This avoids both a per-simulation
+Python loop and storing (n_sims x T) path arrays.
 """
 
 import numpy as np
 
 
 def ols_slope(y, x_lag):
-    """OLS slope of y on a constant and x_lag."""
+    """OLS slope of y on a constant and x_lag (small-sample helper for tests)."""
     X = np.column_stack([np.ones(len(x_lag)), x_lag])
     coef, *_ = np.linalg.lstsq(X, y, rcond=None)
     return coef[1]
 
 
-def simulate_paths(alpha, beta, theta, rho, Sigma, T, x0, n_sims, seed=0):
-    """Simulate n_sims samples of length T; return per-sample beta_hat, rho_hat.
+def simulate_slopes(alpha, beta, theta, rho, Sigma, T, x0, n_sims, seed=0):
+    """Simulate n_sims samples of length T; return (beta_hats, rho_hats).
 
-    x0 anchors the predictor at the sample start (we use the subsample's first
-    observed value -- a simplification of the paper's conditioning, documented).
+    All simulations advance together: x is an (n_sims,) vector updated T times.
+    OLS slopes are computed from accumulated sums via
+        slope = (T * S_xy - S_x * S_y) / (T * S_xx - S_x**2).
     """
     rng = np.random.default_rng(seed)
-    Sigma = np.asarray(Sigma, dtype=float)
-    beta_hats = np.empty(n_sims)
-    rho_hats = np.empty(n_sims)
+    L = np.linalg.cholesky(np.asarray(Sigma, dtype=float))
 
-    # Draw all shocks at once: (n_sims, T, 2)
-    shocks = rng.multivariate_normal([0.0, 0.0], Sigma, size=(n_sims, T))
+    x = np.full(n_sims, float(x0))
 
-    for s in range(n_sims):
-        u, v = shocks[s, :, 0], shocks[s, :, 1]
-        x = np.empty(T + 1)
-        x[0] = x0
-        r = np.empty(T)
-        for t in range(T):
-            r[t] = alpha + beta * x[t] + u[t]        # r_{t+1} paired with x_t
-            x[t + 1] = theta + rho * x[t] + v[t]
-        beta_hats[s] = ols_slope(r, x[:-1])
-        rho_hats[s] = ols_slope(x[1:], x[:-1])
+    # Accumulators. Predictive regression: y = r_{t+1} on x_t.
+    Sx = np.zeros(n_sims); Sxx = np.zeros(n_sims)
+    Sr = np.zeros(n_sims); Sxr = np.zeros(n_sims)
+    # AR(1): y = x_{t+1} on x_t (shares Sx, Sxx).
+    Sxn = np.zeros(n_sims); Sxxn = np.zeros(n_sims)
 
+    for _ in range(T):
+        z = rng.standard_normal((2, n_sims))
+        u, v = L @ z                       # correlated shocks, each (n_sims,)
+        r = alpha + beta * x + u           # r_{t+1} paired with current x_t
+        x_next = theta + rho * x + v
+
+        Sx += x;      Sxx += x * x
+        Sr += r;      Sxr += x * r
+        Sxn += x_next; Sxxn += x * x_next
+
+        x = x_next
+
+    beta_hats = (T * Sxr - Sx * Sr) / (T * Sxx - Sx**2)
+    rho_hats = (T * Sxxn - Sx * Sxn) / (T * Sxx - Sx**2)
     return beta_hats, rho_hats
+
+
+def summarize_distribution(beta_hats, true_beta=0.0):
+    """Part A moments: bias, std, skewness, and RAW kurtosis (normal = 3),
+    matching the paper's convention (see the 3's in Table 1, Part B)."""
+    a = np.asarray(beta_hats, dtype=float)
+    m, s = a.mean(), a.std(ddof=1)
+    z = (a - m) / a.std(ddof=0)
+    return {
+        "bias": m - true_beta,
+        "std": s,
+        "skewness": (z**3).mean(),
+        "kurtosis": (z**4).mean(),
+    }
+
+
+def true_pvalue(beta_obs, null_beta_hats):
+    """Finite-sample p-value for the test of beta = 0 vs beta > 0: the share
+    of null-simulated slopes at least as large as the observed slope."""
+    return float(np.mean(np.asarray(null_beta_hats) >= beta_obs))
 
 
 def analytical_slope_bias(s_uv, s_vv, rho, T):
@@ -56,20 +88,23 @@ def analytical_slope_bias(s_uv, s_vv, rho, T):
 
 
 if __name__ == "__main__":
-    # THE test: true beta = 0, your estimated 1927-1996 parameters.
+    # Full Part A column for 1927-1996, using last night's Part C estimates.
     s_uu, s_vv, s_uv = 31.2246e-4, 0.1118e-4, -1.6720e-4
     rho, T = 0.9731, 834
-    x0 = 0.04            # a typical D/P level for the era
+    x0 = 0.04
+    beta_obs = 0.2100                     # our estimated slope (Part C)
 
-    beta_hats, rho_hats = simulate_paths(
+    beta_hats, rho_hats = simulate_slopes(
         alpha=0.0, beta=0.0, theta=(1 - rho) * x0, rho=rho,
         Sigma=[[s_uu, s_uv], [s_uv, s_vv]], T=T, x0=x0,
-        n_sims=10_000, seed=42,
+        n_sims=20_000, seed=42,
     )
+    stats = summarize_distribution(beta_hats, true_beta=0.0)
+    p = true_pvalue(beta_obs, beta_hats)
 
-    print(f"TRUE beta = 0. Simulated OLS across {len(beta_hats):,} samples:")
-    print(f"  mean beta_hat        : {beta_hats.mean():+.4f}   <- the bias")
-    print(f"  analytical bias      : {analytical_slope_bias(s_uv, s_vv, rho, T):+.4f}")
-    print(f"  std of beta_hat      : {beta_hats.std(ddof=1):.4f}")
-    print(f"  mean rho_hat         : {rho_hats.mean():.4f}  (true rho = {rho})")
-    print(f"  P(beta_hat > 0)      : {(beta_hats > 0).mean():.3f}")
+    print("Part A, 1927-1996 (true beta = 0):        paper:")
+    print(f"  bias      : {stats['bias']:+.4f}          0.07")
+    print(f"  std       : {stats['std']:.4f}           0.16")
+    print(f"  skewness  : {stats['skewness']:+.4f}          0.71")
+    print(f"  kurtosis  : {stats['kurtosis']:.4f}           3.84")
+    print(f"  p(beta=0) : {p:.4f}           0.17")
