@@ -196,16 +196,25 @@ def task_table_02_updated():
     }
 
 def task_notebook():
-    """Execute the walkthrough notebook and export it to HTML."""
+    """Execute the walkthrough notebook, export HTML, and stage the executed
+    .ipynb in OUTPUT_DIR for the chartbook site build."""
     nb_py = "./src/01_walkthrough.ipynb.py"
     nb = "./src/01_walkthrough.ipynb"
+
+    def copy_executed_notebook():
+        shutil.copy2(nb, OUTPUT_DIR / "01_walkthrough.ipynb")
+
     return {
         "actions": [
             f"jupytext --to notebook --output {nb} {nb_py}",
             f"jupyter nbconvert --execute --to notebook --inplace {nb}",
             f"jupyter nbconvert --to html --output-dir={OUTPUT_DIR} {nb}",
+            copy_executed_notebook,
         ],
-        "targets": [OUTPUT_DIR / "01_walkthrough.html"],
+        "targets": [
+            OUTPUT_DIR / "01_walkthrough.html",
+            OUTPUT_DIR / "01_walkthrough.ipynb",
+        ],
         "file_dep": [
             nb_py,
             DATA_DIR / "predictor_panel.parquet",
@@ -323,29 +332,31 @@ def task_notebook():
 # ]
 
 
-# def task_build_chartbook_site():
-#     """Compile Sphinx Docs"""
-#     notebook_scripts = [
-#         Path(notebook_tasks[notebook]["path"])
-#         for notebook in notebook_tasks.keys()
-#     ]
-#     file_dep = [
-#         "./README.md",
-#         "./chartbook.toml",
-#         *notebook_scripts,
-#     ]
+def task_build_chartbook_site():
+    """Build the chartbook static site into ./docs for GitHub Pages."""
 
-#     return {
-#         "actions": [
-#             "chartbook build -f",
-#         ],  # Use docs as build destination
-#         "targets": sphinx_targets,
-#         "file_dep": file_dep,
-#         "task_dep": [
-#             "run_notebooks",
-#         ],
-#         "clean": True,
-#     }
+    def copy_static_assets():
+        # Sphinx may not copy loose non-source files; ensure they ship.
+        for f in ["playground.html", "report.pdf"]:
+            src = Path("./docs_src/site") / f
+            if src.exists():
+                shutil.copy2(src, Path("./docs") / f)
+        (Path("./docs") / ".nojekyll").touch()
+
+    return {
+        "actions": [
+            "chartbook build -f",
+            copy_static_assets,
+        ],
+        "file_dep": [
+            "chartbook.toml",
+            "./docs_src/site/index_toc.md",
+            "./docs_src/site/project_overview.md",
+            OUTPUT_DIR / "01_walkthrough.ipynb",
+        ],
+        "targets": ["./docs/index.html"],
+        "verbosity": 2,
+    }
 
 
 def task_run_pytest():
