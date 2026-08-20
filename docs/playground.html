@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Stambaugh bias, live</title>
+<style>
+  :root {
+    --ink: #1a1a1a;
+    --muted: #6b6b6b;
+    --accent: #8b0000;
+    --rule: #d8d4cc;
+    --bg: #faf8f5;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 2rem 1rem 4rem;
+    background: var(--bg); color: var(--ink);
+    font: 16px/1.6 Georgia, "Times New Roman", serif;
+  }
+  .wrap { max-width: 820px; margin: 0 auto; }
+  h1 { font-size: 1.9rem; margin: 0 0 .3rem; color: var(--accent); }
+  .sub { color: var(--muted); font-style: italic; margin: 0 0 2rem; }
+  .panel {
+    background: #fff; border: 1px solid var(--rule);
+    border-radius: 6px; padding: 1.5rem; margin-bottom: 1.5rem;
+  }
+  .ctrl { margin-bottom: 1.25rem; }
+  .ctrl label {
+    display: flex; justify-content: space-between;
+    font-family: -apple-system, system-ui, sans-serif;
+    font-size: .9rem; margin-bottom: .4rem;
+  }
+  .ctrl label b { color: var(--accent); font-variant-numeric: tabular-nums; }
+  input[type=range] { width: 100%; accent-color: var(--accent); }
+  .readout {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1rem; margin-top: 1.25rem; padding-top: 1.25rem;
+    border-top: 1px solid var(--rule);
+    font-family: -apple-system, system-ui, sans-serif;
+  }
+  .readout div { text-align: center; }
+  .readout .k { font-size: .78rem; color: var(--muted); display: block; }
+  .readout .v {
+    font-size: 1.5rem; color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+  canvas { width: 100%; height: 260px; display: block; }
+  .note { font-size: .9rem; color: var(--muted); margin-top: .8rem; }
+  code { background: #f0ece6; padding: .1em .35em; border-radius: 3px; font-size: .9em; }
+  a { color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <h1>Watch a regression invent predictability</h1>
+  <p class="sub">An interactive companion to Stambaugh (1999), “Predictive Regressions”.</p>
+
+  <div class="panel">
+    <p style="margin-top:0">
+      Below, the true predictive slope is <b>exactly zero</b>. There is no
+      predictability at all. Yet when we simulate this world thousands of times
+      and run the standard regression on each history, the estimated slopes pile
+      up to the <em>right</em> of zero. Drag the sliders and watch the pile move.
+    </p>
+
+    <div class="ctrl">
+      <label>persistence of the predictor &nbsp; &rho;
+             <b id="rhoOut">0.980</b></label>
+      <input type="range" id="rho" min="0.50" max="0.995" step="0.005" value="0.98">
+    </div>
+
+    <div class="ctrl">
+      <label>sample length &nbsp; T (months)
+             <b id="tOut">240</b></label>
+      <input type="range" id="T" min="60" max="840" step="12" value="240">
+    </div>
+
+    <canvas id="plot" width="1600" height="520"></canvas>
+
+    <div class="readout">
+      <div><span class="k">average estimated slope</span>
+           <span class="v" id="mcBias">—</span></div>
+      <div><span class="k">predicted by the formula</span>
+           <span class="v" id="anBias">—</span></div>
+      <div><span class="k">share of histories with a positive slope</span>
+           <span class="v" id="pPos">—</span></div>
+    </div>
+
+    <p class="note">
+      Innovation correlation fixed at &minus;0.95 and
+      &sigma;<sub>uv</sub>/&sigma;<sub>vv</sub> at the value estimated from
+      CRSP data, 1927&ndash;1996. 1,500 simulated histories per update.
+    </p>
+  </div>
+
+  <div class="panel">
+    <h2 style="margin-top:0;font-size:1.15rem">What you should notice</h2>
+    <p>
+      <b>Push &rho; toward 1.</b> The pile slides right. A more persistent
+      predictor produces a larger bias, because the regression's estimate of
+      persistence is itself biased downward by roughly
+      <code>(1+3&rho;)/T</code>, and that error transmits into the slope with
+      its sign flipped.
+    </p>
+    <p>
+      <b>Push T up.</b> The pile slides back toward zero. The bias is a
+      finite-sample problem: it decays like <code>1/T</code> and vanishes in the
+      limit. OLS is not wrong here, it is <em>biased</em> — a different and more
+      insidious thing.
+    </p>
+    <p>
+      <b>Notice the shape.</b> The distribution is not symmetric. It has a long
+      right tail, which is why a p-value computed from a normal approximation
+      understates how easily a zero-predictability world produces a large
+      positive slope.
+    </p>
+    <p class="note">
+      Why negative correlation? The dividend yield has price in its denominator.
+      A shock that lifts the price lifts this month's return and lowers the
+      yield — one shock, two opposite effects. That single fact drives
+      everything above.
+    </p>
+  </div>
+
+  <p class="note" style="text-align:center">
+    Part of a replication of Stambaugh (1999) for FINM 32900 ·
+    <a href="project_overview.html">project overview</a>
+  </p>
+</div>
+
+<script>
+// Parameters estimated from CRSP, 1927-1996 (see create_table_01_partC.py).
+const S_UU = 31.22e-4, S_VV = 0.112e-4, CORR = -0.95;
+const S_UV = CORR * Math.sqrt(S_UU * S_VV);
+const N_SIMS = 1500;
+
+const rhoEl = document.getElementById('rho');
+const tEl   = document.getElementById('T');
+const cv    = document.getElementById('plot');
+const ctx   = cv.getContext('2d');
+
+// Box-Muller, returning a correlated pair (u, v) with covariance Sigma.
+const L11 = Math.sqrt(S_UU);
+const L21 = S_UV / L11;
+const L22 = Math.sqrt(Math.max(S_VV - L21 * L21, 1e-18));
+
+function randn() {
+  let a = 0, b = 0;
+  while (a === 0) a = Math.random();
+  while (b === 0) b = Math.random();
+  return Math.sqrt(-2 * Math.log(a)) * Math.cos(2 * Math.PI * b);
+}
+
+function simulateSlopes(rho, T) {
+  const out = new Float64Array(N_SIMS);
+  for (let s = 0; s < N_SIMS; s++) {
+    // Accumulate OLS cross-products as the path is generated.
+    let x = 0, Sx = 0, Sxx = 0, Sr = 0, Sxr = 0;
+    for (let t = 0; t < T; t++) {
+      const z1 = randn(), z2 = randn();
+      const u = L11 * z1;
+      const v = L21 * z1 + L22 * z2;
+      const r = u;                 // TRUE beta = 0
+      Sx += x; Sxx += x * x; Sr += r; Sxr += x * r;
+      x = rho * x + v;
+    }
+    out[s] = (T * Sxr - Sx * Sr) / (T * Sxx - Sx * Sx);
+  }
+  return out;
+}
+
+function analyticalBias(rho, T) {
+  return -(S_UV / S_VV) * (1 + 3 * rho) / T;
+}
+
+function draw(slopes) {
+  const W = cv.width, H = cv.height, pad = 46;
+  ctx.clearRect(0, 0, W, H);
+
+  let lo = Infinity, hi = -Infinity;
+  for (const s of slopes) { if (s < lo) lo = s; if (s > hi) hi = s; }
+  const span = Math.max(hi - lo, 1e-9);
+  lo -= span * 0.05; hi += span * 0.05;
+  if (lo > 0) lo = -span * 0.05;      // always show zero
+
+  const nb = 60, bins = new Array(nb).fill(0);
+  for (const s of slopes) {
+    let k = Math.floor((s - lo) / (hi - lo) * nb);
+    if (k < 0) k = 0; if (k >= nb) k = nb - 1;
+    bins[k]++;
+  }
+  const peak = Math.max(...bins);
+  const X = v => pad + (v - lo) / (hi - lo) * (W - 2 * pad);
+  const Y = c => H - pad - (c / peak) * (H - 2 * pad);
+
+  // Bars.
+  ctx.fillStyle = '#c9b8b8';
+  const bw = (W - 2 * pad) / nb;
+  bins.forEach((c, i) => {
+    const h = H - pad - Y(c);
+    ctx.fillRect(pad + i * bw, Y(c), Math.max(bw - 1, 1), h);
+  });
+
+  // Axis.
+  ctx.strokeStyle = '#999'; ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(pad, H - pad); ctx.lineTo(W - pad, H - pad);
+  ctx.stroke();
+
+  // Zero line (the truth).
+  ctx.strokeStyle = '#1a1a1a'; ctx.lineWidth = 3; ctx.setLineDash([9, 7]);
+  ctx.beginPath(); ctx.moveTo(X(0), pad * 0.4); ctx.lineTo(X(0), H - pad);
+  ctx.stroke(); ctx.setLineDash([]);
+
+  // Mean of the simulated slopes.
+  const mean = slopes.reduce((a, b) => a + b, 0) / slopes.length;
+  ctx.strokeStyle = '#8b0000'; ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(X(mean), pad * 0.4); ctx.lineTo(X(mean), H - pad);
+  ctx.stroke();
+
+  ctx.font = '22px -apple-system, system-ui, sans-serif';
+  ctx.fillStyle = '#1a1a1a'; ctx.textAlign = 'center';
+  ctx.fillText('true \u03B2 = 0', X(0), pad * 0.28);
+  ctx.fillStyle = '#8b0000';
+  ctx.fillText('average estimate', X(mean), H - pad + 30);
+
+  return mean;
+}
+
+let timer = null;
+function update(immediate) {
+  const rho = parseFloat(rhoEl.value), T = parseInt(tEl.value, 10);
+  document.getElementById('rhoOut').textContent = rho.toFixed(3);
+  document.getElementById('tOut').textContent = T;
+  document.getElementById('anBias').textContent =
+    analyticalBias(rho, T).toFixed(3);
+
+  clearTimeout(timer);
+  timer = setTimeout(() => {
+    const slopes = simulateSlopes(rho, T);
+    const mean = draw(slopes);
+    document.getElementById('mcBias').textContent = mean.toFixed(3);
+    let pos = 0;
+    for (const s of slopes) if (s > 0) pos++;
+    document.getElementById('pPos').textContent =
+      (100 * pos / slopes.length).toFixed(0) + '%';
+  }, immediate ? 0 : 150);
+}
+
+rhoEl.addEventListener('input', () => update(false));
+tEl.addEventListener('input', () => update(false));
+update(true);
+</script>
+</body>
+</html>

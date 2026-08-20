@@ -30,6 +30,10 @@ OS_TYPE = config("OS_TYPE")
 ## Helpers for handling Jupyter Notebook tasks
 environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
 
+# Force UTF-8 file I/O. On Windows, latexmk resets the console code page to 437,
+# after which the chartbook build fails reading UTF-8 sources with cp437.
+environ["PYTHONUTF8"] = "1"
+
 # fmt: off
 ## Helper functions for automatic execution of Jupyter notebooks
 def jupyter_execute_notebook(notebook_path):
@@ -153,7 +157,7 @@ def task_figure_01():
     }
 
 def task_table_02():
-    """Build Table 2 (Bayesian posteriors, specs A and B) as LaTeX."""
+    """Build Table 2 (Bayesian posteriors, specs A-D) as LaTeX."""
     return {
         "actions": ["python ./src/create_table_02.py"],
         "targets": [OUTPUT_DIR / "table_02.tex"],
@@ -196,16 +200,25 @@ def task_table_02_updated():
     }
 
 def task_notebook():
-    """Execute the walkthrough notebook and export it to HTML."""
+    """Execute the walkthrough notebook, export HTML, and stage the executed
+    .ipynb in OUTPUT_DIR for the chartbook site build."""
     nb_py = "./src/01_walkthrough.ipynb.py"
     nb = "./src/01_walkthrough.ipynb"
+
+    def copy_executed_notebook():
+        shutil.copy2(nb, OUTPUT_DIR / "01_walkthrough.ipynb")
+
     return {
         "actions": [
             f"jupytext --to notebook --output {nb} {nb_py}",
             f"jupyter nbconvert --execute --to notebook --inplace {nb}",
             f"jupyter nbconvert --to html --output-dir={OUTPUT_DIR} {nb}",
+            copy_executed_notebook,
         ],
-        "targets": [OUTPUT_DIR / "01_walkthrough.html"],
+        "targets": [
+            OUTPUT_DIR / "01_walkthrough.html",
+            OUTPUT_DIR / "01_walkthrough.ipynb",
+        ],
         "file_dep": [
             nb_py,
             DATA_DIR / "predictor_panel.parquet",
@@ -280,72 +293,53 @@ def task_notebook():
 ###############################################################
 
 
-# def task_compile_latex_docs():
-#     """Compile the LaTeX documents to PDFs"""
-#     file_dep = [
-#         "./reports/report_example.tex",
-#         "./reports/my_article_header.sty",
-#         "./reports/slides_example.tex",
-#         "./reports/my_beamer_header.sty",
-#         "./reports/my_common_header.sty",
-#         "./reports/report_simple_example.tex",
-#         "./reports/slides_simple_example.tex",
-#         "./src/example_plot.py",
-#         "./src/example_table.py",
-#     ]
-#     targets = [
-#         "./reports/report_example.pdf",
-#         "./reports/slides_example.pdf",
-#         "./reports/report_simple_example.pdf",
-#         "./reports/slides_simple_example.pdf",
-#     ]
-
-#     return {
-#         "actions": [
-#             # My custom LaTeX templates
-#             "latexmk -xelatex -halt-on-error -cd ./reports/report_example.tex",  # Compile
-#             "latexmk -xelatex -halt-on-error -c -cd ./reports/report_example.tex",  # Clean
-#             "latexmk -xelatex -halt-on-error -cd ./reports/slides_example.tex",  # Compile
-#             "latexmk -xelatex -halt-on-error -c -cd ./reports/slides_example.tex",  # Clean
-#             # Simple templates based on small adjustments to Overleaf templates
-#             "latexmk -xelatex -halt-on-error -cd ./reports/report_simple_example.tex",  # Compile
-#             "latexmk -xelatex -halt-on-error -c -cd ./reports/report_simple_example.tex",  # Clean
-#             "latexmk -xelatex -halt-on-error -cd ./reports/slides_simple_example.tex",  # Compile
-#             "latexmk -xelatex -halt-on-error -c -cd ./reports/slides_simple_example.tex",  # Clean
-#         ],
-#         "targets": targets,
-#         "file_dep": file_dep,
-#         "clean": True,
-#     }
-
-# sphinx_targets = [
-#     "./docs/index.html",
-# ]
+def task_compile_latex_docs():
+    """Compile the project report to PDF."""
+    return {
+        "actions": [
+            "latexmk -pdf -halt-on-error -cd ./reports/report.tex",
+            "latexmk -pdf -halt-on-error -c -cd ./reports/report.tex",
+        ],
+        "targets": ["./reports/report.pdf"],
+        "file_dep": [
+            "./reports/report.tex",
+            "./reports/my_article_header.sty",
+            "./reports/my_common_header.sty",
+            OUTPUT_DIR / "table_01.tex",
+            OUTPUT_DIR / "table_02.tex",
+            OUTPUT_DIR / "table_01_updated.tex",
+            OUTPUT_DIR / "table_02_updated.tex",
+            OUTPUT_DIR / "figure_01.png",
+        ],
+        "clean": True,
+    }
 
 
-# def task_build_chartbook_site():
-#     """Compile Sphinx Docs"""
-#     notebook_scripts = [
-#         Path(notebook_tasks[notebook]["path"])
-#         for notebook in notebook_tasks.keys()
-#     ]
-#     file_dep = [
-#         "./README.md",
-#         "./chartbook.toml",
-#         *notebook_scripts,
-#     ]
+def task_build_chartbook_site():
+    """Build the chartbook static site into ./docs for GitHub Pages."""
 
-#     return {
-#         "actions": [
-#             "chartbook build -f",
-#         ],  # Use docs as build destination
-#         "targets": sphinx_targets,
-#         "file_dep": file_dep,
-#         "task_dep": [
-#             "run_notebooks",
-#         ],
-#         "clean": True,
-#     }
+    def copy_static_assets():
+        # Sphinx may not copy loose non-source files; ensure they ship.
+        for f in ["playground.html", "report.pdf"]:
+            src = Path("./docs_src/site") / f
+            if src.exists():
+                shutil.copy2(src, Path("./docs") / f)
+        (Path("./docs") / ".nojekyll").touch()
+
+    return {
+        "actions": [
+            "chartbook build -f",
+            copy_static_assets,
+        ],
+        "file_dep": [
+            "chartbook.toml",
+            "./docs_src/site/index_toc.md",
+            "./docs_src/site/project_overview.md",
+            OUTPUT_DIR / "01_walkthrough.ipynb",
+        ],
+        "targets": ["./docs/index.html"],
+        "verbosity": 2,
+    }
 
 
 def task_run_pytest():

@@ -117,17 +117,26 @@ if __name__ == "__main__":
 
 
     combined = pd.concat(
-        {"A. True properties (simulated)": format_partAB(partA),
-         "B. Standard regression setting": format_partAB(partB),
+        {"A. Simulated (true $\\beta=0$)": format_partAB(partA),
+         "B. Standard regression": format_partAB(partB),
          "C. Sample characteristics": format_partC(partC)}
     )
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    latex = combined.to_latex(
-        escape=False,
-        caption=(
-            " Samples are extended through the most recently available data; "
-            "1997--2024 lies entirely outside Stambaugh's original sample."
-            if updated else
+    if updated:
+        caption = (
+            "Finite-sample properties of the OLS predictive slope, samples "
+            "extended through 2024. Structure follows Table~\\ref{tab:table1}: "
+            "Part A simulates the null at the Part C parameters, Part B gives "
+            "the standard regression model's assertions. The 1997--2024 column "
+            "lies entirely outside Stambaugh's original sample. Takeaway: the "
+            "bias falls as the sample lengthens (0.07 to 0.06 in the full "
+            "sample, tracking the $1/T$ rate), but in the modern subsamples it "
+            "grows large relative to the slope itself, and the gap between the "
+            "naive and finite-sample $p$-values widens to tenfold in "
+            "1997--2024 (0.01 against 0.15)."
+        )
+    else:
+        caption = (
             "Finite-sample properties of the OLS predictive slope "
             "(replication of Stambaugh 1999, Table 1). "
             "Part A reports the simulated distribution of the OLS slope when "
@@ -145,7 +154,11 @@ if __name__ == "__main__":
             "ten times the naive ones in Part B -- most starkly in 1952--1996, "
             "where the naive test rejects no-predictability at 1.4\\% while "
             "the finite-sample test cannot reject it at 16.5\\%."
-        ),
+        )
+
+    latex = combined.to_latex(
+        escape=False,
+        caption=caption,
         label=f"tab:table1{suffix}",
     )
     (OUTPUT_DIR / f"table_01{suffix}.tex").write_text(latex)

@@ -49,10 +49,10 @@ PART2_LAYOUT = [
 ]
 
 SPEC_TITLES = {
-    "A": r"A. Conditional likelihood; $\rho \in (-\infty, \infty)$",
-    "B": r"B. Conditional likelihood; $\rho \in (-1, 1)$",
-    "C": r"C. Exact likelihood; $\rho \in (-1, 1)$",
-    "D": r"D. Exact likelihood, alternative prior; $\rho \in (-1, 1)$",
+    "A": r"A. Conditional; $\rho$ free",
+    "B": r"B. Conditional; $|\rho|<1$",
+    "C": r"C. Exact; $|\rho|<1$",
+    "D": r"D. Exact, alt.\ prior",
 }
 
 
@@ -146,9 +146,21 @@ if __name__ == "__main__":
     )
 
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    latex = combined.to_latex(
-        escape=False,
-        caption=(
+    if updated:
+        caption = (
+            "Posterior distributions for $\\beta$, samples extended through "
+            "2024. Specifications follow Table~\\ref{tab:table2}: A and B "
+            "condition on $x_0$, C and D use the exact likelihood and are "
+            "sampled by Metropolis-Hastings. Takeaway: in the modern "
+            "subsamples every specification places almost no posterior mass "
+            "below zero, in sharp contrast to the finite-sample frequentist "
+            "$p$-value of 0.15 for 1997--2024 in "
+            "Table~\\ref{tab:table1_updated}; the stationarity restriction, "
+            "which mattered in 1977--1996, is nearly non-binding once the "
+            "samples lengthen."
+        )
+    else:
+        caption = (
             "Posterior distributions for $\\beta$ (replication of Stambaugh "
             "1999, Table 2). Parts A and B condition the likelihood on $x_0$; "
             "with a flat prior the posterior is conjugate and centers on the "
@@ -164,8 +176,12 @@ if __name__ == "__main__":
             "$\\rho$ near one, and across all four specifications the "
             "posterior places far less mass below zero than the "
             "finite-sample frequentist $p$-values of "
-            "Table~\\ref{tab:table1} would suggest." + caption_extra
-        ),
+            "Table~\\ref{tab:table1} would suggest."
+        )
+
+    latex = combined.to_latex(
+        escape=False,
+        caption=caption,
         label=f"tab:table2{suffix}",
     )
     (OUTPUT_DIR / f"table_02{suffix}.tex").write_text(latex)
