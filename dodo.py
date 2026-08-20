@@ -199,6 +199,21 @@ def task_table_02_updated():
         "clean": True,
     }
 
+def task_update_comparison():
+    """Build the paper-era vs updated-era comparison exhibit."""
+    return {
+        "actions": ["python ./src/create_update_comparison.py"],
+        "targets": [OUTPUT_DIR / "update_comparison.tex"],
+        "file_dep": [
+            "./src/create_update_comparison.py",
+            "./src/create_table_01_partC.py",
+            "./src/monte_carlo.py",
+            "./src/stambaugh_bias.py",
+            DATA_DIR / "predictor_panel.parquet",
+        ],
+        "clean": True,
+    }
+
 def task_notebook():
     """Execute the walkthrough notebook, export HTML, and stage the executed
     .ipynb in OUTPUT_DIR for the chartbook site build."""

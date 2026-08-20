@@ -56,7 +56,7 @@ apidocs/index
 | Contributors                    | Ashish Maheshwari & Omar Anabtawi |
 | Repository                     |                   |
 | Pipeline Web Page               | <a href="file://C:/Users/ashis/Git/Full-Stack-QF/stambaugh_1999_replication/docs/index.html">Pipeline Web Page      |
-| Date of Last Code Update        | 2026-08-20 00:33:42           |
+| Date of Last Code Update        | 2026-08-20 00:51:39           |
 | OS Compatibility                | Windows, Linux, macOS |
 | Linked Dataframes               |  |
 
