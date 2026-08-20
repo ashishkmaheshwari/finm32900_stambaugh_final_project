@@ -56,181 +56,157 @@ apidocs/index
 | Contributors                    | Ashish Maheshwari & Omar Anabtawi |
 | Repository                     |                   |
 | Pipeline Web Page               | <a href="file://C:/Users/ashis/Git/Full-Stack-QF/stambaugh_1999_replication/docs/index.html">Pipeline Web Page      |
-| Date of Last Code Update        | 2026-08-19 22:53:27           |
+| Date of Last Code Update        | 2026-08-19 23:31:05           |
 | OS Compatibility                | Windows, Linux, macOS |
 | Linked Dataframes               |  |
 
 
 **Build Commands:**
 ```
-module load anaconda3/3.11.4 TeXLive/2023
+pip install -r requirements.txt
 doit
 
 ```
 
 
+Does the dividend–price ratio predict stock returns? For decades the standard
+test regressed next month's excess return on this month's dividend yield and
+usually found a positive, "significant" slope. Stambaugh (1999, *Journal of
+Financial Economics* 54) showed the test is broken in a quantifiable way: the
+dividend yield is highly persistent and shares a price with the return, so the
+OLS slope is **biased upward in finite samples**. A positive slope is what you
+should expect even when the true slope is zero.
 
-## About this project
+This project rebuilds the data from CRSP, replicates the paper's Table 1,
+Table 2, and Figure 1 within a documented tolerance, and extends every exhibit
+through 2024 — where the problem turns out to be worse than in the paper's own
+sample: the gap between the naive and the finite-sample p-value has grown from
+roughly threefold to tenfold.
 
-Replication of Stambaugh's Paper on Predictive Regressions (1999)
+**[Read the project site](https://ashishkmaheshwari.github.io/finm32900_stambaugh_final_project/)**
+— overview, walkthrough notebook, interactive playground, and full report.
 
-## Quick Start
+## Exhibits
 
-The quickest way to run code in this repo is to use the following steps.
+| Exhibit | Content | Headline result |
+|---|---|---|
+| Table 1 | Finite-sample properties of the OLS slope, by subsample | Our finite-sample p-value 0.177 vs the paper's 0.17 |
+| Table 2 | Bayesian posteriors under four prior/likelihood specifications | All sixteen cells within ~0.03 of the paper |
+| Figure 1 | β vs ρ across methods and subperiods | Reproduces the paper's ρ > 1 overshoot in 1977–96 |
+| Updates | Tables 1 and 2 on samples through 2024 | Naive p 0.015 vs honest p 0.149 in 1997–2024 |
 
-You must have TexLive (or another LaTeX distribution) installed on your computer and available in your path.
-You can do this by downloading and installing it from here ([windows](https://tug.org/texlive/windows.html#install)
-and [mac](https://tug.org/mactex/mactex-download.html) installers).
+Plus two educational products: a guided walkthrough notebook and an interactive
+browser playground where two sliders show the bias growing with persistence and
+shrinking with sample size.
 
+## Repository structure
 
-First, you must have the `conda` package manager installed (e.g., via Anaconda). However, I recommend using `mamba`, via [miniforge](https://github.com/conda-forge/miniforge) as it is faster and more lightweight than `conda`.
-
-Create and activate the conda environment:
-```bash
-conda env create -f environment.yml
-conda activate stambaugh_1999_replication
+```
+.
+├── dodo.py                     # PyDoit build file — runs everything
+├── chartbook.toml              # site configuration
+├── requirements.txt
+├── .env.example                # template for your .env (WRDS_USERNAME)
+├── src/
+│   ├── settings.py             # configuration: paths, dates, credentials
+│   ├── pull_CRSP_index.py      # WRDS pull: CRSP monthly market index
+│   ├── pull_fama_french.py     # WRDS pull: risk-free rate
+│   ├── calc_predictor_data.py  # DATA CLEANING ONLY -> tidy monthly panel
+│   ├── monte_carlo.py          # simulation engine (Table 1 Part A)
+│   ├── stambaugh_bias.py       # bias-corrected estimators (Figure 1)
+│   ├── bayesian.py             # conjugate posteriors (Table 2 specs A, B)
+│   ├── mcmc.py                 # Metropolis-Hastings (Table 2 specs C, D)
+│   ├── create_table_01_partC.py
+│   ├── create_table_01.py      # Table 1 assembly -> _output/*.tex
+│   ├── create_table_02.py      # Table 2 assembly -> _output/*.tex
+│   ├── create_figure_01.py     # Figure 1 -> _output/figure_01.png
+│   ├── 01_walkthrough.ipynb.py # guided tour notebook (jupytext source)
+│   └── test_*.py               # unit tests
+├── reports/report.tex          # the write-up; inputs the generated exhibits
+├── docs_src/                   # site sources (edit these)
+├── docs/                       # BUILT site — generated, served by Pages
+├── _data/                      # pulled and cleaned data (git-ignored)
+└── _output/                    # generated tables, figures (git-ignored)
 ```
 
-Finally, run the project tasks:
+Data cleaning lives in its own file, separate from all analysis. Raw data never
+enters the repository.
+
+## Setup
+
+```bash
+conda create -n stambaugh python=3.12 -y
+conda activate stambaugh
+pip install -r requirements.txt
+cp .env.example .env      # then set WRDS_USERNAME=your_login
+```
+
+The first WRDS connection prompts for your password and offers to create a
+`.pgpass` file so later runs are non-interactive. `.env` is git-ignored and must
+never be committed.
+
+## Running it
+
 ```bash
 doit
 ```
-And that's it!
 
+That pulls from WRDS, builds the tidy panel, regenerates every table and figure,
+compiles the report, executes the notebook, rebuilds the site, and runs the
+tests. PyDoit tracks dependencies, so re-running rebuilds only what changed.
 
-### Other commands
-
-#### Unit Tests and Doc Tests
-
-You can run the unit test, including doctests, with the following command:
-```
-pytest --doctest-modules
-```
-
-You can build the documentation with:
-```
-rm ./src/.pytest_cache/README.md
-jupyter-book build -W ./
-```
-Use `del` instead of rm on Windows
-
-
-#### Setting Environment Variables
-
-You can [export your environment variables](https://stackoverflow.com/questions/43267413/how-to-set-environment-variables-from-env-file)
-from your `.env` files like so, if you wish. This can be done easily in a Linux or Mac terminal with the following command:
-```bash
-set -a  # automatically export all variables
-source .env
-set +a
-```
-On Windows (PowerShell):
-```powershell
-Get-Content .env | ForEach-Object { if ($_ -match '^([^=]+)=(.*)$') { [Environment]::SetEnvironmentVariable($matches[1], $matches[2], 'Process') } }
-```
-
-### Formatting
-
-This project uses [Ruff](https://docs.astral.sh/ruff/) for linting and formatting Python code.
+Individual stages:
 
 ```bash
-# Auto-fix linting issues (e.g., unused imports, undefined names)
-ruff check . --fix
-
-# Format code (consistent style, spacing, line length)
-ruff format .
-
-# Sort imports, then fix linting issues, then format
-ruff format . && ruff check --select I --fix . && ruff check --fix .
+doit pull                  # WRDS pulls
+doit clean_data            # tidy panel
+doit table_01 figure_01    # paper-sample exhibits
+doit table_01_updated      # extended-sample exhibits
+doit notebook              # execute the walkthrough
+doit compile_latex_docs    # report PDF
+doit build_chartbook_site  # the published site
+doit run_pytest            # test suite
 ```
 
-- `ruff check --fix` applies safe auto-fixes for linting violations
-- `ruff format` formats code similar to Black
-- `--select I` targets only import sorting rules (isort-compatible)
+Note that `table_02` runs eight Metropolis-Hastings chains and takes several
+minutes.
 
-### General Directory Structure
+## Testing
 
- - The `assets` folder is used for things like hand-drawn figures or other
-   pictures that were not generated from code. These things cannot be easily
-   recreated if they are deleted.
-
- - The `_output` folder, on the other hand, contains dataframes and figures that are
-   generated from code. The entire folder should be able to be deleted, because
-   the code can be run again, which would again generate all of the contents.
-
- - The `data_manual` is for data that cannot be easily recreated. This data
-   should be version controlled. Anything in the `_data` folder or in
-   the `_output` folder should be able to be recreated by running the code
-   and can safely be deleted.
-
- - I'm using the `doit` Python module as a task runner. It works like `make` and
-   the associated `Makefile`s. To rerun the code, install `doit`
-   (https://pydoit.org/) and execute the command `doit` from the `src`
-   directory. Note that doit is very flexible and can be used to run code
-   commands from the command prompt, thus making it suitable for projects that
-   use scripts written in multiple different programming languages.
-
- - I'm using the `.env` file as a container for absolute paths that are private
-   to each collaborator in the project. You can also use it for private
-   credentials, if needed. It should not be tracked in Git.
-
-### Data and Output Storage
-
-I'll often use a separate folder for storing data. Any data in the data folder
-can be deleted and recreated by rerunning the PyDoit command (the pulls are in
-the dodo.py file). Any data that cannot be automatically recreated should be
-stored in the "data_manual" folder. Because of the risk of manually-created data
-getting changed or lost, I prefer to keep it under version control if I can.
-Thus, data in the "_data" folder is excluded from Git (see the .gitignore file),
-while the "data_manual" folder is tracked by Git.
-
-Output is stored in the "_output" directory. This includes dataframes, charts, and
-rendered notebooks. When the output is small enough, I'll keep this under
-version control. I like this because I can keep track of how dataframes change as my
-analysis progresses, for example.
-
-Of course, the _data directory and _output directory can be kept elsewhere on the
-machine. To make this easy, I always include the ability to customize these
-locations by defining the path to these directories in environment variables,
-which I intend to be defined in the `.env` file, though they can also simply be
-defined on the command line or elsewhere. The `settings.py` is responsible for
-loading these environment variables and doing some preprocessing on them.
-The `settings.py` file is the entry point for all other scripts to these
-definitions. That is, all code that references these variables and others are
-loaded by importing `config`.
-
-### Naming Conventions
-
- - **`pull_` vs `load_`**: Files or functions that pull data from an external
- data source are prepended with "pull_", as in "pull_fred.py". Functions that
- load data that has been cached in the "_data" folder are prepended with "load_".
- For example, inside of the `pull_CRSP_Compustat.py` file there is both a
- `pull_compustat` function and a `load_compustat` function. The first pulls from
- the web, whereas the other loads cached data from the "_data" directory.
-
-
-### Dependencies and Virtual Environments
-
-#### Working with `conda` environments
-
-This project uses conda for environment management. The dependencies are stored in `environment.yml`.
-
-To create/update the environment:
 ```bash
-conda env create -f environment.yml
-# or to update an existing environment:
-conda env update -f environment.yml
+pytest -q src/
 ```
 
-To activate the environment:
-```bash
-conda activate stambaugh_1999_replication
-```
+The suite is split deliberately. Simulation-based tests verify the bias
+mechanism itself — that the bias is positive when innovations are negatively
+correlated, vanishes when they are not, shrinks like 1/T, and matches the
+Kendall/Stambaugh analytical formula — and run anywhere, including CI without
+credentials. Data-dependent tests check our estimates against the paper's
+published values within stated tolerances, and skip with an explanatory message
+when the panel has not been built.
 
-To export the current environment:
-```bash
-conda env export > environment.yml
-```
+## Data sources
 
-**Tip:** Consider using `mamba` instead of `conda` for faster package resolution. Install via [miniforge](https://github.com/conda-forge/miniforge).
+- **CRSP Monthly Stock Market Indexes** (`crsp.msi`, WRDS) — value-weighted
+  returns with (`vwretd`) and without (`vwretx`) dividends. Their difference
+  gives the dividend series, which is how the dividend–price ratio is
+  reconstructed without a separate dividend file.
+- **Fama–French monthly factors** (`ff.factors_monthly`, WRDS) — the one-month
+  risk-free rate, for continuously compounded excess returns.
 
+Stambaugh uses a NYSE-only value-weighted index; our WRDS instance provides no
+pre-built NYSE-only monthly index carrying both return columns, so we use the
+CRSP total-market value-weighted index and document the choice in the report.
+
+## A note on `docs/`
+
+The built site is committed so GitHub Pages can serve it directly without a
+build step. Edit `docs_src/`, never `docs/` — the latter is regenerated by
+`doit build_chartbook_site` and hand edits are lost.
+
+## Team
+
+- Ashish Maheshwari
+- Omar Anabtawi
+
+FINM 32900, Full-Stack Quantitative Finance, Summer 2026.
