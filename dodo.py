@@ -184,6 +184,20 @@ def task_table_01_updated():
         "clean": True,
     }
 
+def task_update_comparison():
+    """Build paper-era versus updated-era comparison exhibit."""
+    return {
+        "actions": ["python ./src/create_update_comparison.py"],
+        "targets": [OUTPUT_DIR / "update_comparison.tex"],
+        "file_dep": [
+            "./src/create_update_comparison.py",
+            "./src/create_table_01_partC.py",
+            "./src/monte_carlo.py",
+            DATA_DIR / "predictor_panel.parquet",
+        ],
+        "clean": True,
+    }
+
 
 def task_table_02_updated():
     """Build Table 2 on samples extended through the most recent data."""
