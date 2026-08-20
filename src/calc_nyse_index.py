@@ -2,10 +2,10 @@
 
 from pathlib import Path
 
-import numpy as np
 import pandas as pd
 
 from calc_predictor_data import build_tidy_panel, load_tidy_panel
+from create_table_01_partC import fit_subsample
 from pull_CRSP_stock import load_CRSP_monthly_file
 from pull_fama_french import load_fama_french_factors
 from settings import config
@@ -18,14 +18,12 @@ def build_nyse_value_weighted_index(stock_df: pd.DataFrame) -> pd.DataFrame:
     """Value-weight NYSE stock returns using lagged market capitalization."""
     df = stock_df.copy()
 
-    required_cols = {"date", "permno", "ret", "retx", "market_cap"}
+    required_cols = {"date", "permno", "ret", "retx", "market_cap", "primaryexch"}
     missing = required_cols.difference(df.columns)
     if missing:
         raise ValueError(f"Missing required CRSP stock columns: {sorted(missing)}")
 
-    if "primaryexch" in df.columns:
-        df = df[df["primaryexch"] == "N"].copy()
-
+    df = df[df["primaryexch"] == "N"].copy()
     df["date"] = pd.to_datetime(df["date"]) + pd.offsets.MonthEnd(0)
 
     for col in ["ret", "retx", "market_cap"]:
@@ -58,20 +56,6 @@ def build_nyse_value_weighted_index(stock_df: pd.DataFrame) -> pd.DataFrame:
     return out[["date", "vwretd", "vwretx", "totval", "n_stocks"]]
 
 
-def predictive_ols_slope(panel: pd.DataFrame) -> float:
-    """Estimate the predictive slope of excess returns on lagged log D/P."""
-    data = panel[["date", "ret_excess", "log_dp"]].copy()
-    data = data.sort_values("date")
-    data["log_dp_lag"] = data["log_dp"].shift(1)
-    data = data.dropna(subset=["ret_excess", "log_dp_lag"])
-
-    x = data["log_dp_lag"].to_numpy()
-    y = data["ret_excess"].to_numpy()
-    x_mat = np.column_stack([np.ones(len(x)), x])
-
-    return float(np.linalg.lstsq(x_mat, y, rcond=None)[0][1])
-
-
 def make_comparison_table(
     total_market_panel: pd.DataFrame, nyse_panel: pd.DataFrame
 ) -> pd.DataFrame:
@@ -82,30 +66,34 @@ def make_comparison_table(
     total["date"] = pd.to_datetime(total["date"]) + pd.offsets.MonthEnd(0)
     nyse["date"] = pd.to_datetime(nyse["date"]) + pd.offsets.MonthEnd(0)
 
-    merged = total[["date", "log_dp"]].merge(
-        nyse[["date", "log_dp"]],
+    merged = total[["date", "dp_ratio"]].merge(
+        nyse[["date", "dp_ratio"]],
         on="date",
         how="inner",
         suffixes=("_total_market", "_nyse"),
     )
 
-    start_date = merged["date"].min()
-    end_date = merged["date"].max()
+    start_date = merged["date"].min().strftime("%Y-%m-%d")
+    end_date = merged["date"].max().strftime("%Y-%m-%d")
 
-    total_overlap = total[(total["date"] >= start_date) & (total["date"] <= end_date)]
-    nyse_overlap = nyse[(nyse["date"] >= start_date) & (nyse["date"] <= end_date)]
+    total_fit = fit_subsample(total, start_date, end_date)
+    nyse_fit = fit_subsample(nyse, start_date, end_date)
 
-    corr = merged["log_dp_total_market"].corr(merged["log_dp_nyse"])
-    total_slope = predictive_ols_slope(total_overlap)
-    nyse_slope = predictive_ols_slope(nyse_overlap)
+    corr = merged["dp_ratio_total_market"].corr(merged["dp_ratio_nyse"])
 
     return pd.DataFrame(
         [
-            {"Statistic": "First overlapping month", "Value": start_date.strftime("%Y-%m")},
-            {"Statistic": "Last overlapping month", "Value": end_date.strftime("%Y-%m")},
-            {"Statistic": "Correlation of log D/P series", "Value": f"{corr:.4f}"},
-            {"Statistic": "OLS slope, total-market index", "Value": f"{total_slope:.6f}"},
-            {"Statistic": "OLS slope, NYSE stock-file index", "Value": f"{nyse_slope:.6f}"},
+            {"Statistic": "First overlapping month", "Value": start_date[:7]},
+            {"Statistic": "Last overlapping month", "Value": end_date[:7]},
+            {"Statistic": "Correlation of D/P series", "Value": f"{corr:.4f}"},
+            {
+                "Statistic": "OLS slope, total-market index",
+                "Value": f"{float(total_fit['beta_hat']):.6f}",
+            },
+            {
+                "Statistic": "OLS slope, NYSE stock-file index",
+                "Value": f"{float(nyse_fit['beta_hat']):.6f}",
+            },
         ]
     )
 
