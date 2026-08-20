@@ -30,6 +30,10 @@ OS_TYPE = config("OS_TYPE")
 ## Helpers for handling Jupyter Notebook tasks
 environ["PYDEVD_DISABLE_FILE_VALIDATION"] = "1"
 
+# Force UTF-8 file I/O. On Windows, latexmk resets the console code page to 437,
+# after which the chartbook build fails reading UTF-8 sources with cp437.
+environ["PYTHONUTF8"] = "1"
+
 # fmt: off
 ## Helper functions for automatic execution of Jupyter notebooks
 def jupyter_execute_notebook(notebook_path):
