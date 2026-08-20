@@ -215,6 +215,23 @@ def task_notebook():
         ],
         "clean": True,
     }
+
+def task_summary_stats():
+    """Create summary statistics table and chart of the underlying data."""
+    return {
+        "actions": ["python src/create_summary_stats.py"],
+        "task_dep": ["clean_data"],
+        "file_dep": [
+            "src/create_summary_stats.py",
+            "_data/predictor_panel.parquet",
+        ],
+        "targets": [
+            "_output/summary_stats.tex",
+            "_output/summary_stats_dp.png",
+            "_output/summary_stats_dp_figure.tex",
+        ],
+        "clean": True,
+    }
 # def task_summary_stats():
 #     """Generate summary statistics tables"""
 #     file_dep = ["./src/example_table.py"]
