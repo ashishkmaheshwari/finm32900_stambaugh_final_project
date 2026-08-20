@@ -359,8 +359,8 @@ def task_compile_latex_docs():
     """Compile the project report to PDF."""
     return {
         "actions": [
-            "latexmk -pdf -halt-on-error -cd ./reports/report.tex",
-            "latexmk -pdf -halt-on-error -c -cd ./reports/report.tex",
+            "latexmk -C -cd ./reports/report.tex",
+            "latexmk -pdf -cd ./reports/report.tex",
         ],
         "targets": ["./reports/report.pdf"],
         "file_dep": [

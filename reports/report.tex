@@ -112,6 +112,12 @@ resulting panel.
 
 \input{../_output/summary_stats_dp_figure.tex}
 
+\paragraph{A note on numbering.} Our exhibit numbers necessarily differ from
+the paper's, since we add exhibits of our own. Throughout, our
+Table~\ref{tab:table1} corresponds to the paper's Table 1, our
+Table~\ref{tab:table2} to the paper's Table 2, and our
+Figure~\ref{fig:figure1} to the paper's Figure 1.
+
 \section{Replication results}
 
 Table~\ref{tab:table1} reports the finite-sample properties of the OLS
@@ -191,8 +197,9 @@ the paper to within about 0.03. Chains were run to effective sample sizes above
 200, which supports the means and tail probabilities to the two decimals
 reported; the higher moments should be read as indicative only.
 
-Figure~\ref{fig:figure1} reproduces the geometry of the paper's Figure 1. Our
-bias-adjusted points correspond to the paper's ``F'' points and match closely:
+Figure~\ref{fig:figure1} reproduces the geometry of Stambaugh's original
+Figure~1. Our bias-adjusted points correspond to the paper's ``F'' points 
+and match closely:
 $(\rho, \beta) = (0.978, 0.14)$ against the paper's $(0.976, 0.145)$ for
 1927--1996, and $(1.007, -0.21)$ against $(1.007, -0.22)$ for 1977--1996.
 
@@ -237,7 +244,7 @@ without help from the prior.
 
 \paragraph{What replicated well.} The parameter estimates, the simulated
 finite-sample moments, all sixteen Bayesian posterior cells across four
-specifications, and the geometry of Figure 1 reproduce within a few hundredths,
+specifications, and the geometry of Figure~\ref{fig:figure1} reproduce within a few hundredths,
 including the paper's most extreme individual result.
 
 \input{../_output/nyse_index_comparison.tex}
@@ -274,8 +281,8 @@ sizes above 90\% of nominal draws. In the post-war samples it failed. Part D's
 prior carries a $(1-\rho^2)^{-1}$ factor that grows without bound as $\rho$
 approaches one, so in the 1952--1996 sample the ten heaviest draws all had
 $\rho > 0.999$ and the weighted posterior mean of $\rho$ was dragged from 0.981
-to 0.989, displacing that specification's position in
-Figure~\ref{fig:figure1}. The diagnosis is that the conditional posterior,
+to 0.989, displacing that specification's position in Figure~\ref{fig:figure1}. 
+The diagnosis is that the conditional posterior,
 concentrated near $\rho = 0.98$, is a poor proposal for a target that places
 substantial weight against the unit-root boundary; drawing more samples would
 not have helped. We therefore replaced the reweighting with a

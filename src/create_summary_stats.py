@@ -104,14 +104,23 @@ def _write_latex_table(table: pd.DataFrame, output_path: Path) -> None:
         "Stambaugh finite-sample bias."
     )
 
+    n_cols = table.shape[1]
+    col_format = "lcc" + "r" * (n_cols - 3)
     latex = table.to_latex(
         index=False,
         escape=True,
         caption=caption,
         label="tab:summary-stats",
-        column_format="lrrrrrrrrrrr",
+        column_format=col_format,
+        float_format="%.3f",
     )
 
+    # Wrap the tabular in a resizebox so the eleven columns fit the text width.
+    latex = latex.replace(
+        r"\begin{tabular}", r"\resizebox{\textwidth}{!}{%" + "\n" + r"\begin{tabular}"
+    ).replace(
+        r"\end{tabular}", r"\end{tabular}}"
+    )
     output_path.write_text(latex, encoding="utf-8")
 
 
