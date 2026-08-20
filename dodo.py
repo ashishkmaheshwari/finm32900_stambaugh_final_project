@@ -158,6 +158,22 @@ def task_clean_nyse_index():
         "clean": True,
     }
 
+def task_summary_stats():
+    """Create the summary statistics table and chart of the underlying data."""
+    return {
+        "actions": ["python ./src/create_summary_stats.py"],
+        "targets": [
+            OUTPUT_DIR / "summary_stats.tex",
+            OUTPUT_DIR / "summary_stats_dp.png",
+            OUTPUT_DIR / "summary_stats_dp_figure.tex",
+        ],
+        "file_dep": [
+            "./src/create_summary_stats.py",
+            DATA_DIR / "predictor_panel.parquet",
+        ],
+        "clean": True,
+    }
+
 def task_table_01():
     """Build Table 1 (Parts A/B/C) as LaTeX."""
     return {
