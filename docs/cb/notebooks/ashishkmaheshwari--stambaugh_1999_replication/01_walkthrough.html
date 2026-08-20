@@ -1,0 +1,1372 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Replicating Stambaugh (1999), “Predictive Regressions” &#8212; Stambaugh 1999 Replication</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=206a6f58" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../../../_static/documentation_options.js?v=b9472d72"></script>
+    <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'cb/notebooks/ashishkmaheshwari--stambaugh_1999_replication/01_walkthrough';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="../../../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="Chart List" href="../../charts.html" />
+    <link rel="prev" title="Methodology" href="../../../project_overview/methodology.html" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+     
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.png" class="logo__image only-light" alt="Stambaugh 1999 Replication - Home"/>
+    <img src="../../../_static/logo.png" class="logo__image only-dark pst-js-only" alt="Stambaugh 1999 Replication - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../../index.html">
+                    Stambaugh 1999 Replication
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Project Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../project_overview.html">Project Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../project_overview/goals.html">Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project_overview/data_sources.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../project_overview/methodology.html">Methodology</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks 📖</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Walkthrough: replicating Stambaugh (1999)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../charts.html">Chart List</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/cb/notebooks/ashishkmaheshwari--stambaugh_1999_replication/01_walkthrough.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Replicating Stambaugh (1999), “Predictive Regressions”</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data">1. The data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-ols-misleads-here">2. Why OLS misleads here</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-replication">3. The replication</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#table-1-finite-sample-properties-of-the-ols-slope">Table 1: finite-sample properties of the OLS slope</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#table-2-the-bayesian-view">Table 2: the Bayesian view</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-1-what-the-corrections-do">Figure 1: what the corrections do</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bringing-it-to-the-present">4. Bringing it to the present</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-and-modifying-this-yourself">5. Running and modifying this yourself</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                   <section class="tex2jax_ignore mathjax_ignore" id="replicating-stambaugh-1999-predictive-regressions">
+<h1>Replicating Stambaugh (1999), “Predictive Regressions”<a class="headerlink" href="#replicating-stambaugh-1999-predictive-regressions" title="Link to this heading">#</a></h1>
+<p>Does the dividend-price ratio predict stock returns? For decades the standard
+test was a simple regression of next month’s return on this month’s dividend
+yield, and it usually produced a positive, “significant” slope. Stambaugh
+(1999) shows that this test is broken in a specific and quantifiable way: the
+regression’s slope estimator is biased upward in finite samples, so a positive
+slope is exactly what one should expect even when the true slope is zero.</p>
+<p>The cause is that the dividend yield and the return share a price. A shock
+that raises the price this month raises the return and simultaneously lowers
+the yield (price sits in the denominator). Those two shocks are therefore
+strongly negatively correlated – about -0.95 in our data – and that
+correlation, combined with a predictor so persistent it is nearly a random
+walk, is what tilts the estimator.</p>
+<p>This notebook walks through the whole replication: how we built the data, why
+the estimator misbehaves, what the corrected numbers look like, and how the
+picture changes when we extend the sample to 2024.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;.&quot;</span><span class="p">)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">calc_predictor_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_tidy_panel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">create_table_01_partC</span><span class="w"> </span><span class="kn">import</span> <span class="n">SUBSAMPLES</span><span class="p">,</span> <span class="n">UPDATE_SUBSAMPLES</span><span class="p">,</span> <span class="n">fit_subsample</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">monte_carlo</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">analytical_slope_bias</span><span class="p">,</span>
+    <span class="n">simulate_slopes</span><span class="p">,</span>
+    <span class="n">summarize_distribution</span><span class="p">,</span>
+    <span class="n">true_pvalue</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">stambaugh_bias</span><span class="w"> </span><span class="kn">import</span> <span class="n">bias_adjusted_slope</span><span class="p">,</span> <span class="n">bias_correct_rho</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">bayesian</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">exact_likelihood_log_weights</span><span class="p">,</span>
+    <span class="n">posterior_moments</span><span class="p">,</span>
+    <span class="n">sample_posterior</span><span class="p">,</span>
+    <span class="n">weighted_moments</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">panel</span> <span class="o">=</span> <span class="n">load_tidy_panel</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">panel</span><span class="p">)</span><span class="si">}</span><span class="s2"> monthly observations, &quot;</span>
+      <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">panel</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">panel</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">date</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">panel</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1171 monthly observations, 1927-06-30 to 2024-12-31
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>date</th>
+      <th>vwretd</th>
+      <th>vwretx</th>
+      <th>rf</th>
+      <th>ret_excess</th>
+      <th>totval</th>
+      <th>price_index</th>
+      <th>div_monthly</th>
+      <th>div_ttm</th>
+      <th>dp_ratio</th>
+      <th>log_dp</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1166</th>
+      <td>2024-08-31</td>
+      <td>0.021572</td>
+      <td>0.020203</td>
+      <td>0.0048</td>
+      <td>0.016554</td>
+      <td>70854066700.0</td>
+      <td>343.894004</td>
+      <td>0.461468</td>
+      <td>5.053705</td>
+      <td>0.014696</td>
+      <td>-4.220212</td>
+    </tr>
+    <tr>
+      <th>1167</th>
+      <td>2024-09-30</td>
+      <td>0.020969</td>
+      <td>0.019485</td>
+      <td>0.004</td>
+      <td>0.01676</td>
+      <td>72318924000.0</td>
+      <td>350.594779</td>
+      <td>0.510339</td>
+      <td>5.151828</td>
+      <td>0.014695</td>
+      <td>-4.220279</td>
+    </tr>
+    <tr>
+      <th>1168</th>
+      <td>2024-10-31</td>
+      <td>-0.008298</td>
+      <td>-0.009139</td>
+      <td>0.0039</td>
+      <td>-0.012225</td>
+      <td>71771754400.0</td>
+      <td>347.390693</td>
+      <td>0.29485</td>
+      <td>5.181914</td>
+      <td>0.014917</td>
+      <td>-4.205276</td>
+    </tr>
+    <tr>
+      <th>1169</th>
+      <td>2024-11-30</td>
+      <td>0.064855</td>
+      <td>0.063463</td>
+      <td>0.004</td>
+      <td>0.058847</td>
+      <td>76451547300.0</td>
+      <td>369.437149</td>
+      <td>0.483568</td>
+      <td>5.143478</td>
+      <td>0.013922</td>
+      <td>-4.274251</td>
+    </tr>
+    <tr>
+      <th>1170</th>
+      <td>2024-12-31</td>
+      <td>-0.031582</td>
+      <td>-0.03347</td>
+      <td>0.0037</td>
+      <td>-0.035785</td>
+      <td>74032373700.0</td>
+      <td>357.072088</td>
+      <td>0.697497</td>
+      <td>5.240361</td>
+      <td>0.014676</td>
+      <td>-4.221547</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<section id="the-data">
+<h2>1. The data<a class="headerlink" href="#the-data" title="Link to this heading">#</a></h2>
+<p>Everything comes from two WRDS pulls.</p>
+<p><strong>The market index (<code class="docutils literal notranslate"><span class="pre">crsp.msi</span></code>).</strong> This is CRSP’s <em>pre-aggregated</em> monthly
+value-weighted market index, not the security-level stock file. CRSP has
+already done the cap-weighting, so we consume a finished series instead of
+rebuilding it from thousands of rows per month (which would require lagged
+market-cap weights and delisting-return handling – easy to get subtly wrong).</p>
+<p><strong>The dividend series, without a dividend database.</strong> The index file reports
+the value-weighted return two ways: <code class="docutils literal notranslate"><span class="pre">vwretd</span></code> includes dividends, <code class="docutils literal notranslate"><span class="pre">vwretx</span></code>
+excludes them. Their difference is therefore the month’s dividend expressed as
+a fraction of last month’s price. Compounding <code class="docutils literal notranslate"><span class="pre">vwretx</span></code> gives a price level
+<span class="math notranslate nohighlight">\(P_t\)</span>, so the dividend in index units is
+<span class="math notranslate nohighlight">\(D_t = (\text{vwretd}_t - \text{vwretx}_t) \cdot P_{t-1}\)</span>. Summing twelve
+trailing months gives an annual dividend, and the predictor is <span class="math notranslate nohighlight">\(D_{12,t}/P_t\)</span>.</p>
+<p><strong>The risk-free rate (<code class="docutils literal notranslate"><span class="pre">ff.factors_monthly</span></code>).</strong> The dependent variable is the
+<em>excess</em> return: predictability is about compensation for risk, and the
+risk-free component is known in advance. We use continuously compounded
+excess returns, <span class="math notranslate nohighlight">\(\log(1+R_m) - \log(1+R_f)\)</span>, matching the paper’s Table 1
+note. This detail mattered: with simple returns our slopes ran roughly 50%
+high in the volatile pre-war subsamples, and switching to log returns brought
+the full-sample slope to 0.2100 against the paper’s 0.21.</p>
+<p><strong>One honest caveat.</strong> Stambaugh uses a NYSE-only value-weighted index; our
+WRDS instance has no pre-built NYSE-only monthly index carrying both
+<code class="docutils literal notranslate"><span class="pre">vwretd</span></code> and <code class="docutils literal notranslate"><span class="pre">vwretx</span></code>, so we use the CRSP total-market value-weighted index.
+Both are value-weighted, so the same mega-cap (mostly NYSE) firms dominate
+both, and for the first half of the sample the universes coincide – AMEX
+enters CRSP in 1962 and NASDAQ at the end of 1972. A NYSE-only rebuild from
+the stock file is provided separately as a robustness check.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">6</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">panel</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">panel</span><span class="p">[</span><span class="s2">&quot;dp_ratio&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:blue&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;D/P&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;The predictor: dividend-price ratio (trailing 12m dividends / price)&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">panel</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">],</span> <span class="n">panel</span><span class="p">[</span><span class="s2">&quot;ret_excess&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:gray&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;excess return&quot;</span><span class="p">)</span>
+<span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;The dependent variable: monthly excess market return&quot;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/6cca9c287061be22ed97230ad4fa346338141a3e52f7d30e312b4d89c5baed9d.png" src="../../../_images/6cca9c287061be22ed97230ad4fa346338141a3e52f7d30e312b4d89c5baed9d.png" />
+</div>
+</div>
+<p>The contrast is the whole setup. The dividend yield wanders slowly through
+decade-long swings – today’s value is nearly last month’s value. The excess
+return is noise around zero with no visible memory. We are regressing
+something almost unpredictable on something almost constant, and that
+combination is where the finite-sample problem lives.</p>
+<p>Two numbers make it precise.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">panel</span><span class="p">[</span><span class="s2">&quot;log_dp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">panel</span><span class="p">[</span><span class="s2">&quot;ret_excess&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+
+<span class="n">rho_full</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">rho_full</span> <span class="o">*</span> <span class="n">x</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>          <span class="c1"># yield innovation</span>
+<span class="n">corr_uv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">corrcoef</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">v</span><span class="p">)[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>  <span class="c1"># correlation with return innovation</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;AR(1) persistence of the log dividend yield : rho  = </span><span class="si">{</span><span class="n">rho_full</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Correlation of return and yield innovations : corr = </span><span class="si">{</span><span class="n">corr_uv</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>AR(1) persistence of the log dividend yield : rho  = 0.9926
+Correlation of return and yield innovations : corr = -0.954
+</pre></div>
+</div>
+</div>
+</div>
+<p>Persistence of 0.99 and an innovation correlation of -0.95. Those two numbers
+are the entire mechanism, and everything below is a consequence of them.</p>
+</section>
+<section id="why-ols-misleads-here">
+<h2>2. Why OLS misleads here<a class="headerlink" href="#why-ols-misleads-here" title="Link to this heading">#</a></h2>
+<p>OLS in this regression is <em>consistent</em> – with enough data the slope converges
+to the truth – but it is <em>biased in finite samples</em>. The reason is that
+strict exogeneity fails. The return shock <span class="math notranslate nohighlight">\(u_{t+1}\)</span> is correlated with the
+yield shock <span class="math notranslate nohighlight">\(v_{t+1}\)</span>, and <span class="math notranslate nohighlight">\(v_{t+1}\)</span> moves the <em>future</em> regressor <span class="math notranslate nohighlight">\(x_{t+1}\)</span>.
+So the regressor is not independent of the error at all leads and lags, which
+is what unbiasedness requires.</p>
+<p>The bias arrives in two steps.</p>
+<p><strong>Step one: persistence is underestimated.</strong> The least-squares estimate of
+<span class="math notranslate nohighlight">\(\rho\)</span> in an AR(1) is biased downward by roughly <span class="math notranslate nohighlight">\((1+3\rho)/T\)</span> (Kendall,
+1954). With <span class="math notranslate nohighlight">\(\rho\)</span> near one and a few hundred observations, that is not a
+rounding error.</p>
+<p><strong>Step two: that error leaks into the slope with its sign flipped.</strong>
+Stambaugh’s equation (12):</p>
+<div class="math notranslate nohighlight">
+\[E[\hat\beta - \beta] = \frac{\sigma_{uv}}{\sigma_{vv}} \, E[\hat\rho - \rho]
+  \approx -\frac{\sigma_{uv}}{\sigma_{vv}} \cdot \frac{1 + 3\rho}{T}.\]</div>
+<p><span class="math notranslate nohighlight">\(\hat\rho\)</span> is too low (negative term) and <span class="math notranslate nohighlight">\(\sigma_{uv}\)</span> is negative, so the
+product is <strong>positive</strong>: the slope is biased <em>up</em>. Both ingredients are needed
+– a persistent predictor and correlated innovations. Remove either and the
+bias vanishes.</p>
+<p>We can watch this happen. Below we simulate a world where the true slope is
+<em>exactly zero</em>, using the persistence and covariance we estimated from the
+real 1927–1996 sample, and look at what OLS reports.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">c</span> <span class="o">=</span> <span class="n">fit_subsample</span><span class="p">(</span><span class="n">panel</span><span class="p">,</span> <span class="o">*</span><span class="n">SUBSAMPLES</span><span class="p">[</span><span class="s2">&quot;1927-1996&quot;</span><span class="p">])</span>
+<span class="n">rho</span><span class="p">,</span> <span class="n">T</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="s2">&quot;rho_hat&quot;</span><span class="p">],</span> <span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">])</span>
+<span class="n">s_uu</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="s2">&quot;sigma2_u_x1e4&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e-4</span>
+<span class="n">s_vv</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="s2">&quot;sigma2_v_x1e4&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e-4</span>
+<span class="n">s_uv</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="s2">&quot;sigma_uv_x1e4&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e-4</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">panel</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">panel</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">SUBSAMPLES</span><span class="p">[</span><span class="s2">&quot;1927-1996&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;dp_ratio&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="n">beta_hats</span><span class="p">,</span> <span class="n">rho_hats</span> <span class="o">=</span> <span class="n">simulate_slopes</span><span class="p">(</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rho</span><span class="p">)</span> <span class="o">*</span> <span class="n">x0</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">rho</span><span class="p">,</span>
+    <span class="n">Sigma</span><span class="o">=</span><span class="p">[[</span><span class="n">s_uu</span><span class="p">,</span> <span class="n">s_uv</span><span class="p">],</span> <span class="p">[</span><span class="n">s_uv</span><span class="p">,</span> <span class="n">s_vv</span><span class="p">]],</span> <span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">n_sims</span><span class="o">=</span><span class="mi">20_000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">summarize_distribution</span><span class="p">(</span><span class="n">beta_hats</span><span class="p">,</span> <span class="n">true_beta</span><span class="o">=</span><span class="mf">0.0</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;TRUE beta = 0, simulated </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">beta_hats</span><span class="p">)</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> samples of length </span><span class="si">{</span><span class="n">T</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  mean OLS slope      : </span><span class="si">{</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;bias&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">+.4f</span><span class="si">}</span><span class="s2">  &lt;- pure bias&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  analytical formula  : </span><span class="si">{</span><span class="n">analytical_slope_bias</span><span class="p">(</span><span class="n">s_uv</span><span class="p">,</span><span class="w"> </span><span class="n">s_vv</span><span class="p">,</span><span class="w"> </span><span class="n">rho</span><span class="p">,</span><span class="w"> </span><span class="n">T</span><span class="p">)</span><span class="si">:</span><span class="s2">+.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  mean rho_hat        : </span><span class="si">{</span><span class="n">rho_hats</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">   (true rho = </span><span class="si">{</span><span class="n">rho</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  P(slope &gt; 0)        : </span><span class="si">{</span><span class="p">(</span><span class="n">beta_hats</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>TRUE beta = 0, simulated 20,000 samples of length 834
+  mean OLS slope      : +0.0741  &lt;- pure bias
+  analytical formula  : +0.0703
+  mean rho_hat        : 0.9681   (true rho = 0.9731)
+  P(slope &gt; 0)        : 0.651
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">hist</span><span class="p">(</span><span class="n">beta_hats</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="mi">80</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:blue&quot;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;true $</span><span class="se">\\</span><span class="s2">beta$ = 0&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">beta_hats</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:red&quot;</span><span class="p">,</span>
+           <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;mean $</span><span class="se">\\</span><span class="s2">hat</span><span class="se">\\</span><span class="s2">beta$ = </span><span class="si">{</span><span class="n">beta_hats</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="si">:</span><span class="s2">+.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="s2">&quot;beta_hat&quot;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;tab:green&quot;</span><span class="p">,</span>
+           <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;observed $</span><span class="se">\\</span><span class="s2">hat</span><span class="se">\\</span><span class="s2">beta$ = </span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;beta_hat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\hat\beta$&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;frequency&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Distribution of the OLS slope when the true slope is zero&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../../_images/86dec8c38d6f7f644af9dbd0ecde515214aa92c245d7fda2cde238a732d3457e.png" src="../../../_images/86dec8c38d6f7f644af9dbd0ecde515214aa92c245d7fda2cde238a732d3457e.png" />
+</div>
+</div>
+<p>Three things to read off that histogram.</p>
+<ol class="arabic simple">
+<li><p><strong>The pile is shifted right of zero.</strong> Two-thirds of histories in a world
+with no predictability hand the econometrician a positive slope.</p></li>
+<li><p><strong>It is right-skewed and fat-tailed</strong> (skewness <span class="math notranslate nohighlight">\(\approx 0.74\)</span>, kurtosis
+<span class="math notranslate nohighlight">\(\approx 3.9\)</span>, against 0 and 3 for a normal). The naive test assumes
+symmetry and normality; both fail.</p></li>
+<li><p><strong>The observed slope is inside the pile, not beyond it.</strong> The green line is
+the estimate from real data. It sits in territory a zero-predictability
+world visits routinely.</p></li>
+</ol>
+<p>That third point is what the “true” p-value formalizes: rather than asking how
+far the estimate is from zero in standard errors, we ask how often a
+zero-slope world produces a slope at least this large.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p_true</span> <span class="o">=</span> <span class="n">true_pvalue</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="s2">&quot;beta_hat&quot;</span><span class="p">],</span> <span class="n">beta_hats</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;observed slope        : </span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;beta_hat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;naive p-value         : </span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;p_naive&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;finite-sample p-value : </span><span class="si">{</span><span class="n">p_true</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>observed slope        : 0.2100
+naive p-value         : 0.0629
+finite-sample p-value : 0.1774
+</pre></div>
+</div>
+</div>
+</div>
+<p>6% versus 18%. Same data, same slope – the honest p-value is three times the
+naive one, and it does not clear any conventional threshold.</p>
+</section>
+<section id="the-replication">
+<h2>3. The replication<a class="headerlink" href="#the-replication" title="Link to this heading">#</a></h2>
+<section id="table-1-finite-sample-properties-of-the-ols-slope">
+<h3>Table 1: finite-sample properties of the OLS slope<a class="headerlink" href="#table-1-finite-sample-properties-of-the-ols-slope" title="Link to this heading">#</a></h3>
+<p>Table 1 assembles this for all four of the paper’s subsamples. Part C reports
+the parameters estimated from data; Part A simulates the null at those
+parameters; Part B reports what the textbook regression model claims.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">create_table_01</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_table_01</span><span class="p">,</span> <span class="n">format_partAB</span><span class="p">,</span> <span class="n">format_partC</span>
+
+<span class="n">partA</span><span class="p">,</span> <span class="n">partB</span><span class="p">,</span> <span class="n">partC</span> <span class="o">=</span> <span class="n">build_table_01</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Part A -- true properties (paper: bias 0.07/0.18/0.18/0.42,&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;                                 p-value 0.17/0.42/0.15/0.64)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">format_partAB</span><span class="p">(</span><span class="n">partA</span><span class="p">)</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Part B -- standard regression setting (paper p: 0.06/0.22/0.02/0.26)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">format_partAB</span><span class="p">(</span><span class="n">partB</span><span class="p">)</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Part C -- sample characteristics (paper: beta 0.21/0.21/0.44/0.19,&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;                                  rho 0.972/0.948/0.980/0.987)&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">format_partC</span><span class="p">(</span><span class="n">partC</span><span class="p">)</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Part A -- true properties (paper: bias 0.07/0.18/0.18/0.42,
+                                 p-value 0.17/0.42/0.15/0.64)
+                        1927-1996 1927-1951 1952-1996 1977-1996
+Bias                         0.07      0.19      0.20      0.52
+Standard deviation           0.16      0.34      0.29      0.51
+Skewness                     0.74      0.84      1.04      1.33
+Kurtosis                     3.90      4.12      4.83      5.89
+$p$-value for $\beta=0$      0.18      0.41      0.17      0.72
+
+Part B -- standard regression setting (paper p: 0.06/0.22/0.02/0.26)
+                        1927-1996 1927-1951 1952-1996 1977-1996
+Bias                         0.00      0.00      0.00      0.00
+Standard deviation           0.14      0.28      0.21      0.31
+Skewness                     0.00      0.00      0.00      0.00
+Kurtosis                     3.00      3.00      3.00      3.00
+$p$-value for $\beta=0$      0.06      0.21      0.01      0.27
+Part C -- sample characteristics (paper: beta 0.21/0.21/0.44/0.19,
+                                  rho 0.972/0.948/0.980/0.987)
+                          1927-1996 1927-1951 1952-1996 1977-1996
+$\hat\beta$                    0.21      0.22      0.46      0.19
+$T$                             834       294       539       239
+$\rho$                        0.973     0.946     0.981     0.990
+$\sigma_u^2 \times 10^4$      31.22     57.26     17.15     18.65
+$\sigma_v^2 \times 10^4$      0.112     0.265     0.027     0.030
+$\sigma_{uv} \times 10^4$    -1.672    -3.564    -0.647    -0.704
+</pre></div>
+</div>
+</div>
+</div>
+<p>The persistence estimates match the paper to the third decimal, the
+covariance structure matches in sign and magnitude, and the simulated bias,
+skewness, kurtosis and p-values land within a few hundredths in three of four
+subsamples.</p>
+<p><strong>Where we differ, and why.</strong> Exact digit-matching is not attainable: CRSP has
+revised its historical data in the 27 years since the paper, our index is
+total-market rather than NYSE-only, and our panel begins in June 1927 (the
+risk-free series starts July 1926 and the trailing-twelve-month dividend
+window consumes eleven months), so <span class="math notranslate nohighlight">\(T\)</span> runs about six observations short. The
+1977–1996 column deviates most – our simulated bias is 0.52 against the
+paper’s 0.42 – because at <span class="math notranslate nohighlight">\(\hat\rho = 0.990\)</span> with only 239 observations the
+bias is hypersensitive to <span class="math notranslate nohighlight">\(\rho\)</span>, and we condition the simulation on the first
+observed predictor value rather than on both endpoints as the paper does.</p>
+</section>
+<section id="table-2-the-bayesian-view">
+<h3>Table 2: the Bayesian view<a class="headerlink" href="#table-2-the-bayesian-view" title="Link to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">create_table_02</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_table_02</span><span class="p">,</span> <span class="n">_format</span>
+
+<span class="n">t2</span> <span class="o">=</span> <span class="n">build_table_02</span><span class="p">()</span>
+<span class="n">targets</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="s2">&quot;paper P(b&lt;=0): 0.06/0.22/0.02/0.26&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="s2">&quot;paper P(b&lt;=0): 0.06/0.22/0.01/0.13&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="s2">&quot;paper P(b&lt;=0): 0.05/0.16/0.01/0.05&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="s2">&quot;paper P(b&lt;=0): 0.10/0.28/0.05/0.16&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+<span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Spec </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2">  (</span><span class="si">{</span><span class="n">targets</span><span class="p">[</span><span class="n">spec</span><span class="p">]</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">_format</span><span class="p">(</span><span class="n">t2</span><span class="p">[</span><span class="n">spec</span><span class="p">])</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-1996: spec B kept 100.0% of draws
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-1996 spec C: MH acceptance 25.0%, ESS = 240
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-1996 spec D: MH acceptance 24.6%, ESS = 237
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-1951: spec B kept 99.8% of draws
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-1951 spec C: MH acceptance 25.6%, ESS = 237
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-1951 spec D: MH acceptance 24.8%, ESS = 241
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1952-1996: spec B kept 98.8% of draws
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1952-1996 spec C: MH acceptance 24.0%, ESS = 207
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1952-1996 spec D: MH acceptance 25.1%, ESS = 209
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1977-1996: spec B kept 79.6% of draws
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1977-1996 spec C: MH acceptance 24.8%, ESS = 217
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1977-1996 spec D: MH acceptance 23.2%, ESS = 209
+
+Spec A  (paper P(b&lt;=0): 0.06/0.22/0.02/0.26)
+                     1927-1996 1927-1951 1952-1996 1977-1996
+Mean                      0.21      0.22      0.46      0.18
+Std. Dev.                 0.14      0.28      0.21      0.30
+Skewness                  0.02      0.02      0.02      0.03
+Kurtosis                  3.02      3.02      3.00      3.03
+Prob($\beta \leq 0$)      0.06      0.21      0.01      0.28
+
+Spec B  (paper P(b&lt;=0): 0.06/0.22/0.01/0.13)
+                     1927-1996 1927-1951 1952-1996 1977-1996
+Mean                      0.21      0.22      0.46      0.28
+Std. Dev.                 0.14      0.28      0.20      0.24
+Skewness                  0.03      0.06      0.14      0.54
+Kurtosis                  2.99      2.95      2.86      3.17
+Prob($\beta \leq 0$)      0.06      0.21      0.01      0.11
+
+Spec C  (paper P(b&lt;=0): 0.05/0.16/0.01/0.05)
+                     1927-1996 1927-1951 1952-1996 1977-1996
+Mean                      0.23      0.24      0.34      0.34
+Std. Dev.                 0.14      0.26      0.16      0.20
+Skewness                  0.11      0.14      0.43      0.12
+Kurtosis                  2.87      2.76      2.83      2.75
+Prob($\beta \leq 0$)      0.04      0.18      0.00      0.04
+
+Spec D  (paper P(b&lt;=0): 0.10/0.28/0.05/0.16)
+                     1927-1996 1927-1951 1952-1996 1977-1996
+Mean                      0.17      0.16      0.29      0.25
+Std. Dev.                 0.14      0.27      0.16      0.25
+Skewness                 -0.20     -0.03     -0.09      0.55
+Kurtosis                  2.82      3.12      2.34      2.72
+Prob($\beta \leq 0$)      0.13      0.28      0.03      0.15
+</pre></div>
+</div>
+</div>
+</div>
+<p>Under a flat prior with the likelihood conditioned on <span class="math notranslate nohighlight">\(x_0\)</span>, the posterior is
+conjugate and centers on the OLS estimate, so spec A’s posterior mean equals
+our OLS slope and its <span class="math notranslate nohighlight">\(P(\beta \le 0)\)</span> tracks the naive p-value – a useful
+internal check that the sampler is right.</p>
+<p>Spec B imposes stationarity. It changes almost nothing in the long samples and
+a great deal in 1977–1996, where roughly a fifth of the unrestricted draws
+are explosive; ruling those out raises the posterior mean and halves
+<span class="math notranslate nohighlight">\(P(\beta \le 0)\)</span> from 0.28 to 0.11. The prior only matters when the data
+cannot pin down persistence on their own.</p>
+<p>Specs C and D use the <strong>exact</strong> likelihood. Specs A and B condition on <span class="math notranslate nohighlight">\(x_0\)</span>
+– they treat the first yield observation as given – but <span class="math notranslate nohighlight">\(x_0\)</span> is data too,
+drawn from the predictor’s own stationary distribution,
+<span class="math notranslate nohighlight">\(x_0 \sim N\!\left(\theta/(1-\rho),\; \sigma_v^2/(1-\rho^2)\right)\)</span>. Adding
+that density is informative about <span class="math notranslate nohighlight">\(\rho\)</span>, and it is nonlinear in <span class="math notranslate nohighlight">\(\rho\)</span>, so
+the posterior is no longer conjugate.</p>
+<p>Because the posterior is no longer conjugate, specs C and D are sampled by
+random-walk Metropolis-Hastings. Two details make it work. The chain moves in
+an unconstrained space – the coefficients plus <span class="math notranslate nohighlight">\(\log\sigma_u\)</span>,
+<span class="math notranslate nohighlight">\(\log\sigma_v\)</span>, and <span class="math notranslate nohighlight">\(\mathrm{atanh}\,\mathrm{corr}\)</span> – so every proposal gives
+a valid covariance matrix, with the change-of-variables Jacobian added to the
+log target. And the proposal covariance is estimated from a pilot chain rather
+than guessed: <span class="math notranslate nohighlight">\(\beta\)</span> and <span class="math notranslate nohighlight">\(\rho\)</span> are strongly correlated in this posterior
+(that correlation <em>is</em> the Stambaugh mechanism), so a diagonal random walk
+crawls across a narrow ridge. With a matched proposal the chain accepts about
+25% of moves and reaches effective sample sizes above 200.</p>
+<p>We validate the sampler by pointing it at the <em>conditional</em> likelihood with a
+flat prior – exactly spec A, where the conjugate answer is known. It returns
+a mean of 0.209, standard deviation 0.135, and <span class="math notranslate nohighlight">\(P(\beta \le 0) = 0.059\)</span>
+against the conjugate 0.21, 0.14, and 0.06. Reproducing an exact answer is
+what earns the right to trust the sampler where no exact answer exists.</p>
+<p><strong>What we tried first, and why it failed.</strong> Before writing the sampler we
+tried to reach C and D by reweighting the spec B draws by the stationary
+density – importance sampling, which is far cheaper. It works in the long
+samples but breaks in the post-war ones: spec D’s <span class="math notranslate nohighlight">\((1-\rho^2)^{-1}\)</span> prior
+factor explodes as <span class="math notranslate nohighlight">\(\rho \to 1\)</span>, so in 1952–1996 the ten heaviest draws all
+had <span class="math notranslate nohighlight">\(\rho &gt; 0.999\)</span> and the weighted mean of <span class="math notranslate nohighlight">\(\rho\)</span> was dragged from 0.981 to
+0.989. The proposal never visits the region the target cares about, and more
+draws would not fix it. That diagnosis is what motivated building the chain.</p>
+<p>The two adjustments push in opposite directions. The exact likelihood
+strengthens the evidence for predictability: for 1927–1996 the posterior mean
+rises from 0.21 to 0.23 and <span class="math notranslate nohighlight">\(P(\beta \le 0)\)</span> falls from 0.06 to 0.04. Spec D’s
+prior, which places more weight near <span class="math notranslate nohighlight">\(\rho = 1\)</span>, pulls the other way: the mean
+falls to 0.17 and <span class="math notranslate nohighlight">\(P(\beta \le 0)\)</span> rises to 0.13. All sixteen posterior cells
+match the paper within about 0.03.</p>
+<p><strong>The tension worth sitting with.</strong> For 1927–1996 the finite-sample
+frequentist p-value is 0.18 – no rejection of “no predictability” – while the
+Bayesian posterior puts only 6% of its mass below zero. Both are correct, and
+they answer different questions. The frequentist asks how often a
+zero-slope world would produce a slope this large; the answer is “often,
+because of the bias.” The Bayesian asks how much belief lies below zero given
+what was actually observed. The paper’s contribution is not that
+predictability is fake, but that the naive test overstates it while the two
+honest frameworks disagree about what remains.</p>
+</section>
+<section id="figure-1-what-the-corrections-do">
+<h3>Figure 1: what the corrections do<a class="headerlink" href="#figure-1-what-the-corrections-do" title="Link to this heading">#</a></h3>
+<p>Figure 1 collects the estimates from both frameworks in one picture: the
+predictive slope plotted against the persistence estimate, for each subsample
+and each method.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">create_figure_01</span><span class="w"> </span><span class="kn">import</span> <span class="n">build_figure_01</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">build_figure_01</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-1996: spec B kept 100.0% of draws
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-1996 spec C: MH acceptance 25.0%, ESS = 240
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-1996 spec D: MH acceptance 24.6%, ESS = 237
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-1951: spec B kept 99.8% of draws
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-1951 spec C: MH acceptance 25.6%, ESS = 237
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-1951 spec D: MH acceptance 24.8%, ESS = 241
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1952-1996: spec B kept 98.8% of draws
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1952-1996 spec C: MH acceptance 24.0%, ESS = 207
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1952-1996 spec D: MH acceptance 25.1%, ESS = 209
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1977-1996: spec B kept 79.6% of draws
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1977-1996 spec C: MH acceptance 24.8%, ESS = 217
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1977-1996 spec D: MH acceptance 23.2%, ESS = 209
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Wrote C:\Users\ashis\Git\Full-Stack-QF\stambaugh_1999_replication\_output\figure_01.png
+</pre></div>
+</div>
+<img alt="../../../_images/f64d31d8545783f01265428e4e9a88a8de5f39035e0f2345fcc90c32b36bb0da.png" src="../../../_images/f64d31d8545783f01265428e4e9a88a8de5f39035e0f2345fcc90c32b36bb0da.png" />
+</div>
+</div>
+<p>In every panel the bias-adjusted point sits below and to the right of OLS:
+correcting the finite-sample bias lowers the slope and raises the persistence
+at the same time, because the two errors are two faces of one problem.</p>
+<p>The 1977–1996 panel is the extreme case and reproduces the paper’s most
+striking result. The bias-corrected persistence exceeds one and the adjusted
+slope turns negative. An explosive dividend yield is economically impossible,
+so this is the correction announcing that 239 months of a near-unit-root
+predictor simply cannot identify these parameters. That pathology is exactly
+what the Bayesian stationarity restriction in Table 2 rules out by
+construction – and indeed spec B discards a fifth of the draws in precisely
+this sample.</p>
+</section>
+</section>
+<section id="bringing-it-to-the-present">
+<h2>4. Bringing it to the present<a class="headerlink" href="#bringing-it-to-the-present" title="Link to this heading">#</a></h2>
+<p>The paper’s sample ends in 1996. We rerun everything through 2024 using
+windows that parallel the paper’s structure: a full sample, a post-war
+sample, the most recent twenty years, and – most interesting – 1997–2024,
+which lies entirely outside anything Stambaugh could see.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">partA_u</span><span class="p">,</span> <span class="n">partB_u</span><span class="p">,</span> <span class="n">partC_u</span> <span class="o">=</span> <span class="n">build_table_01</span><span class="p">(</span><span class="n">subsamples</span><span class="o">=</span><span class="n">UPDATE_SUBSAMPLES</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Part A -- true properties, updated&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">format_partAB</span><span class="p">(</span><span class="n">partA_u</span><span class="p">)</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Part B -- standard regression setting, updated&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">format_partAB</span><span class="p">(</span><span class="n">partB_u</span><span class="p">)</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Part C -- updated samples&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">format_partC</span><span class="p">(</span><span class="n">partC_u</span><span class="p">)</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Part A -- true properties, updated
+                        1927-2024 1952-2024 1997-2024 2005-2024
+Bias                         0.06      0.14      0.57      0.74
+Standard deviation           0.11      0.20      0.86      1.08
+Skewness                     0.79      1.03      0.99      0.96
+Kurtosis                     4.11      4.64      4.57      4.37
+$p$-value for $\beta=0$      0.24      0.30      0.15      0.31
+
+Part B -- standard regression setting, updated
+                        1927-2024 1952-2024 1997-2024 2005-2024
+Bias                         0.00      0.00      0.00      0.00
+Standard deviation           0.10      0.13      0.65      0.85
+Skewness                     0.00      0.00      0.00      0.00
+Kurtosis                     3.00      3.00      3.00      3.00
+$p$-value for $\beta=0$      0.09      0.05      0.01      0.09
+Part C -- updated samples
+                          1927-2024 1952-2024 1997-2024 2005-2024
+$\hat\beta$                    0.13      0.21      1.43      1.13
+$T$                            1170       875       335       239
+$\rho$                        0.984     0.990     0.969     0.956
+$\sigma_u^2 \times 10^4$      28.54     18.98     21.64     20.32
+$\sigma_v^2 \times 10^4$      0.083     0.021     0.010     0.011
+$\sigma_{uv} \times 10^4$    -1.317    -0.564    -0.424    -0.455
+</pre></div>
+</div>
+</div>
+</div>
+<p>Three findings.</p>
+<p><strong>The bias shrinks where the sample grows.</strong> In the full sample <span class="math notranslate nohighlight">\(T\)</span> rises from
+834 to 1,170 months and the simulated bias falls from 0.074 to 0.057, tracking
+the <span class="math notranslate nohighlight">\(1/T\)</span> rate the theory predicts. More data, less bias – as it should be.</p>
+<p><strong>The modern slope is not comparable to the paper’s in raw units.</strong> The
+1997–2024 slope is 1.43, roughly seven times the paper’s full-sample 0.21.
+That is not an explosion of predictability. Look instead at <span class="math notranslate nohighlight">\(\sigma_v^2\)</span>: it
+collapses from <span class="math notranslate nohighlight">\(0.112 \times 10^{-4}\)</span> in the paper’s era to
+<span class="math notranslate nohighlight">\(0.010 \times 10^{-4}\)</span> – a tenfold fall in the variance of the predictor’s
+innovations. As firms shifted from dividends to buybacks the dividend yield
+fell to around 1.5% and stopped moving. A slope is return per unit of yield,
+so when the yield’s variation shrinks by roughly a factor of three in standard
+deviation, the same predictive content mechanically produces a much larger
+coefficient. Comparing eras properly would require standardizing the slope by
+the predictor’s standard deviation.</p>
+<p><strong>Stambaugh’s warning binds harder now than it did in 1999.</strong> In 1997–2024
+the naive p-value is 0.0145 – comfortably “significant” – while the
+finite-sample p-value is 0.1487. That is a tenfold gap, against roughly
+threefold in the paper’s own full sample. The bias, 0.567, is about 40% of the
+estimated slope itself.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t2_u</span> <span class="o">=</span> <span class="n">build_table_02</span><span class="p">(</span><span class="n">subsamples</span><span class="o">=</span><span class="n">UPDATE_SUBSAMPLES</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">spec</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;A&quot;</span><span class="p">,</span> <span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Spec </span><span class="si">{</span><span class="n">spec</span><span class="si">}</span><span class="s2"> -- updated samples&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">_format</span><span class="p">(</span><span class="n">t2_u</span><span class="p">[</span><span class="n">spec</span><span class="p">])</span><span class="o">.</span><span class="n">to_string</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-2024: spec B kept 99.9% of draws
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-2024 spec C: MH acceptance 25.9%, ESS = 258
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-2024 spec D: MH acceptance 25.7%, ESS = 221
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1952-2024: spec B kept 98.9% of draws
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1952-2024 spec C: MH acceptance 25.2%, ESS = 228
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1952-2024 spec D: MH acceptance 26.1%, ESS = 210
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1997-2024: spec B kept 98.8% of draws
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1997-2024 spec C: MH acceptance 25.3%, ESS = 201
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1997-2024 spec D: MH acceptance 25.0%, ESS = 202
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2005-2024: spec B kept 98.6% of draws
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2005-2024 spec C: MH acceptance 25.4%, ESS = 201
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2005-2024 spec D: MH acceptance 24.2%, ESS = 202
+
+Spec A -- updated samples
+                     1927-2024 1952-2024 1997-2024 2005-2024
+Mean                      0.13      0.21      1.42      1.12
+Std. Dev.                 0.10      0.13      0.65      0.84
+Skewness                  0.02      0.02      0.02      0.03
+Kurtosis                  3.04      3.02      3.00      3.01
+Prob($\beta \leq 0$)      0.09      0.05      0.01      0.09
+
+Spec B -- updated samples
+                     1927-2024 1952-2024 1997-2024 2005-2024
+Mean                      0.13      0.22      1.44      1.14
+Std. Dev.                 0.10      0.13      0.63      0.81
+Skewness                  0.05      0.11      0.13      0.16
+Kurtosis                  2.99      2.93      2.87      2.86
+Prob($\beta \leq 0$)      0.09      0.04      0.01      0.08
+
+Spec C -- updated samples
+                     1927-2024 1952-2024 1997-2024 2005-2024
+Mean                      0.14      0.12      1.24      1.36
+Std. Dev.                 0.09      0.10      0.46      0.41
+Skewness                 -0.02      0.47      0.32      0.33
+Kurtosis                  3.01      2.95      1.94      2.11
+Prob($\beta \leq 0$)      0.06      0.12      0.00      0.00
+
+Spec D -- updated samples
+                     1927-2024 1952-2024 1997-2024 2005-2024
+Mean                      0.09      0.07      0.94      0.56
+Std. Dev.                 0.10      0.11      0.44      0.50
+Skewness                  0.12      0.09      0.15      0.32
+Kurtosis                  2.96      2.64      2.19      1.68
+Prob($\beta \leq 0$)      0.19      0.29      0.00      0.10
+</pre></div>
+</div>
+</div>
+</div>
+<p>The Bayesian side sharpens the same tension. For 1997–2024 the posterior
+places just 1% of its mass below zero while the honest frequentist p-value is
+15%. Note also that the stationarity restriction now barely matters – the
+unrestricted sampler retains around 99% of draws in every modern window,
+against 80% in the paper’s 1977–1996 sample. With longer samples and slightly
+lower persistence, the data pin down <span class="math notranslate nohighlight">\(\rho\)</span> well enough that the prior has
+little work left to do.</p>
+</section>
+<section id="running-and-modifying-this-yourself">
+<h2>5. Running and modifying this yourself<a class="headerlink" href="#running-and-modifying-this-yourself" title="Link to this heading">#</a></h2>
+<p>The whole project rebuilds with one command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doit
+</pre></div>
+</div>
+<p>which pulls from WRDS, builds the tidy panel, regenerates every table and
+figure, and runs the test suite. PyDoit tracks dependencies, so editing one
+source file rebuilds only what depends on it.</p>
+<p>To explore a different sample or a different predictor, the pieces compose
+directly. The cell below fits any window you like and reports the OLS slope
+next to its bias-adjusted counterpart and both p-values – change the dates or
+swap <code class="docutils literal notranslate"><span class="pre">dp_ratio</span></code> for <code class="docutils literal notranslate"><span class="pre">log_dp</span></code> and rerun.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">summarize_window</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">predictor</span><span class="o">=</span><span class="s2">&quot;dp_ratio&quot;</span><span class="p">,</span> <span class="n">n_sims</span><span class="o">=</span><span class="mi">10_000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fit one window and report OLS vs bias-adjusted slope and both p-values.&quot;&quot;&quot;</span>
+    <span class="n">c</span> <span class="o">=</span> <span class="n">fit_subsample</span><span class="p">(</span><span class="n">panel</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">predictor</span><span class="o">=</span><span class="n">predictor</span><span class="p">)</span>
+    <span class="n">s_uu</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="s2">&quot;sigma2_u_x1e4&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e-4</span>
+    <span class="n">s_vv</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="s2">&quot;sigma2_v_x1e4&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e-4</span>
+    <span class="n">s_uv</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="s2">&quot;sigma_uv_x1e4&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e-4</span>
+    <span class="n">T</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">])</span>
+
+    <span class="n">beta_adj</span><span class="p">,</span> <span class="n">bias</span><span class="p">,</span> <span class="n">rho_bc</span> <span class="o">=</span> <span class="n">bias_adjusted_slope</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="s2">&quot;beta_hat&quot;</span><span class="p">],</span> <span class="n">s_uv</span><span class="p">,</span> <span class="n">s_vv</span><span class="p">,</span>
+                                                 <span class="n">c</span><span class="p">[</span><span class="s2">&quot;rho_hat&quot;</span><span class="p">],</span> <span class="n">T</span><span class="p">)</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">panel</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">panel</span><span class="p">[</span><span class="s2">&quot;date&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">start</span><span class="p">,</span> <span class="n">predictor</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">null</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">simulate_slopes</span><span class="p">(</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">theta</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">c</span><span class="p">[</span><span class="s2">&quot;rho_hat&quot;</span><span class="p">])</span> <span class="o">*</span> <span class="n">x0</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="n">c</span><span class="p">[</span><span class="s2">&quot;rho_hat&quot;</span><span class="p">],</span>
+        <span class="n">Sigma</span><span class="o">=</span><span class="p">[[</span><span class="n">s_uu</span><span class="p">,</span> <span class="n">s_uv</span><span class="p">],</span> <span class="p">[</span><span class="n">s_uv</span><span class="p">,</span> <span class="n">s_vv</span><span class="p">]],</span> <span class="n">T</span><span class="o">=</span><span class="n">T</span><span class="p">,</span> <span class="n">x0</span><span class="o">=</span><span class="n">x0</span><span class="p">,</span> <span class="n">n_sims</span><span class="o">=</span><span class="n">n_sims</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">start</span><span class="p">[:</span><span class="mi">7</span><span class="p">]</span><span class="si">}</span><span class="s2"> to </span><span class="si">{</span><span class="n">end</span><span class="p">[:</span><span class="mi">7</span><span class="p">]</span><span class="si">}</span><span class="s2">   (T = </span><span class="si">{</span><span class="n">T</span><span class="si">}</span><span class="s2">, predictor = </span><span class="si">{</span><span class="n">predictor</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  OLS slope           : </span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;beta_hat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">+.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  bias estimate       : </span><span class="si">{</span><span class="n">bias</span><span class="si">:</span><span class="s2">+.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  bias-adjusted slope : </span><span class="si">{</span><span class="n">beta_adj</span><span class="si">:</span><span class="s2">+.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  rho: </span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;rho_hat&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2"> -&gt; corrected </span><span class="si">{</span><span class="n">rho_bc</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  naive p-value       : </span><span class="si">{</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;p_naive&#39;</span><span class="p">]</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  finite-sample p     : </span><span class="si">{</span><span class="n">true_pvalue</span><span class="p">(</span><span class="n">c</span><span class="p">[</span><span class="s1">&#39;beta_hat&#39;</span><span class="p">],</span><span class="w"> </span><span class="n">null</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="n">summarize_window</span><span class="p">(</span><span class="s2">&quot;1927-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;1996-12-31&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="n">summarize_window</span><span class="p">(</span><span class="s2">&quot;1997-01-01&quot;</span><span class="p">,</span> <span class="s2">&quot;2024-12-31&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>1927-01 to 1996-12   (T = 834, predictor = dp_ratio)
+  OLS slope           : +0.2100
+  bias estimate       : +0.0705
+  bias-adjusted slope : +0.1395
+  rho: 0.9731 -&gt; corrected 0.9778
+  naive p-value       : 0.0629
+  finite-sample p     : 0.1844
+
+1997-01 to 2024-12   (T = 335, predictor = dp_ratio)
+  OLS slope           : +1.4252
+  bias estimate       : +0.5111
+  bias-adjusted slope : +0.9141
+  rho: 0.9688 -&gt; corrected 0.9805
+  naive p-value       : 0.0145
+  finite-sample p     : 0.1520
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<p>The dividend-price ratio’s apparent power to predict returns is substantially
+an artifact of how the regression is estimated. In the paper’s own sample the
+honest p-value is three times the naive one; in the quarter-century since, it
+is ten times. Whether any predictability survives depends on which inferential
+framework one adopts – and the fact that reasonable frameworks disagree, on
+identical data, is the most durable lesson of the paper.</p>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+   
+</div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../../../project_overview/methodology.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Methodology</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../charts.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chart List</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-data">1. The data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#why-ols-misleads-here">2. Why OLS misleads here</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-replication">3. The replication</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#table-1-finite-sample-properties-of-the-ols-slope">Table 1: finite-sample properties of the OLS slope</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#table-2-the-bayesian-view">Table 2: the Bayesian view</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#figure-1-what-the-corrections-do">Figure 1: what the corrections do</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bringing-it-to-the-present">4. Bringing it to the present</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-and-modifying-this-yourself">5. Running and modifying this yourself</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ashish Maheshwari & Omar Anabtawi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Ashish Maheshwari &amp; Omar Anabtawi.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

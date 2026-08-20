@@ -1,0 +1,736 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Stambaugh 1999 Replication &#8212; Stambaugh 1999 Replication</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=a3416100" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=206a6f58" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="_static/documentation_options.js?v=b9472d72"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'index';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <link rel="icon" href="_static/favicon.ico"/>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Project Overview" href="project_overview.html" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+     
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="#">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt="Stambaugh 1999 Replication - Home"/>
+    <img src="_static/logo.png" class="logo__image only-dark pst-js-only" alt="Stambaugh 1999 Replication - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1 current active">
+                <a class="reference internal" href="#">
+                    Stambaugh 1999 Replication
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Project Notes</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="project_overview.html">Project Overview</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/goals.html">Goals</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/data_sources.html">Data Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="project_overview/methodology.html">Methodology</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks 📖</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cb/notebooks/ashishkmaheshwari--stambaugh_1999_replication/01_walkthrough.html">Walkthrough: replicating Stambaugh (1999)</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="cb/charts.html">Chart List</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/index.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Stambaugh 1999 Replication</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-specs">Pipeline Specs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exhibits">Exhibits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repository-structure">Repository structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-it">Running it</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-sources">Data sources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-on-docs">A note on <code class="docutils literal notranslate"><span class="pre">docs/</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#team">Team</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                   <section class="tex2jax_ignore mathjax_ignore" id="stambaugh-1999-replication">
+<h1>Stambaugh 1999 Replication<a class="headerlink" href="#stambaugh-1999-replication" title="Link to this heading">#</a></h1>
+<p>Last updated: Aug 19, 2026, 11:35:02 PM</p>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Project Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="project_overview.html">Project Overview</a></li>
+</ul>
+</div>
+<section id="table-of-contents">
+<h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks 📖</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cb/notebooks/ashishkmaheshwari--stambaugh_1999_replication/01_walkthrough.html">Walkthrough: replicating Stambaugh (1999)</a></li>
+</ul>
+</div>
+<div class="toctree-wrapper compound">
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Pipeline Charts 📈</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="cb/charts.html">Chart List</a></li>
+</ul>
+</div>
+<ul class="postlist-style-none postlist simple">
+</ul>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+<section id="pipeline-specs">
+<h2>Pipeline Specs<a class="headerlink" href="#pipeline-specs" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Pipeline Name</p></th>
+<th class="head"><p>Stambaugh 1999 Replication</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Pipeline ID</p></td>
+<td><p><a class="reference internal" href="#"><span class="std std-doc">ashishkmaheshwari/stambaugh_1999_replication</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Maintainer</p></td>
+<td><p>Ashish Maheshwari &amp; Omar Anabtawi</p></td>
+</tr>
+<tr class="row-even"><td><p>Contributors</p></td>
+<td><p>Ashish Maheshwari &amp; Omar Anabtawi</p></td>
+</tr>
+<tr class="row-odd"><td><p>Repository</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p>Pipeline Web Page</p></td>
+<td><p><a href="file://C:/Users/ashis/Git/Full-Stack-QF/stambaugh_1999_replication/docs/index.html">Pipeline Web Page</p></td>
+</tr>
+<tr class="row-odd"><td><p>Date of Last Code Update</p></td>
+<td><p>2026-08-19 23:31:05</p></td>
+</tr>
+<tr class="row-even"><td><p>OS Compatibility</p></td>
+<td><p>Windows, Linux, macOS</p></td>
+</tr>
+<tr class="row-odd"><td><p>Linked Dataframes</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Build Commands:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">doit</span>
+
+</pre></div>
+</div>
+<p>Does the dividend–price ratio predict stock returns? For decades the standard
+test regressed next month’s excess return on this month’s dividend yield and
+usually found a positive, “significant” slope. Stambaugh (1999, <em>Journal of
+Financial Economics</em> 54) showed the test is broken in a quantifiable way: the
+dividend yield is highly persistent and shares a price with the return, so the
+OLS slope is <strong>biased upward in finite samples</strong>. A positive slope is what you
+should expect even when the true slope is zero.</p>
+<p>This project rebuilds the data from CRSP, replicates the paper’s Table 1,
+Table 2, and Figure 1 within a documented tolerance, and extends every exhibit
+through 2024 — where the problem turns out to be worse than in the paper’s own
+sample: the gap between the naive and the finite-sample p-value has grown from
+roughly threefold to tenfold.</p>
+<p><strong><a class="reference external" href="https://ashishkmaheshwari.github.io/finm32900_stambaugh_final_project/">Read the project site</a></strong>
+— overview, walkthrough notebook, interactive playground, and full report.</p>
+</section>
+<section id="exhibits">
+<h2>Exhibits<a class="headerlink" href="#exhibits" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Exhibit</p></th>
+<th class="head"><p>Content</p></th>
+<th class="head"><p>Headline result</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Table 1</p></td>
+<td><p>Finite-sample properties of the OLS slope, by subsample</p></td>
+<td><p>Our finite-sample p-value 0.177 vs the paper’s 0.17</p></td>
+</tr>
+<tr class="row-odd"><td><p>Table 2</p></td>
+<td><p>Bayesian posteriors under four prior/likelihood specifications</p></td>
+<td><p>All sixteen cells within ~0.03 of the paper</p></td>
+</tr>
+<tr class="row-even"><td><p>Figure 1</p></td>
+<td><p>β vs ρ across methods and subperiods</p></td>
+<td><p>Reproduces the paper’s ρ &gt; 1 overshoot in 1977–96</p></td>
+</tr>
+<tr class="row-odd"><td><p>Updates</p></td>
+<td><p>Tables 1 and 2 on samples through 2024</p></td>
+<td><p>Naive p 0.015 vs honest p 0.149 in 1997–2024</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Plus two educational products: a guided walkthrough notebook and an interactive
+browser playground where two sliders show the bias growing with persistence and
+shrinking with sample size.</p>
+</section>
+<section id="repository-structure">
+<h2>Repository structure<a class="headerlink" href="#repository-structure" title="Link to this heading">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>.
+├── dodo.py                     # PyDoit build file — runs everything
+├── chartbook.toml              # site configuration
+├── requirements.txt
+├── .env.example                # template for your .env (WRDS_USERNAME)
+├── src/
+│   ├── settings.py             # configuration: paths, dates, credentials
+│   ├── pull_CRSP_index.py      # WRDS pull: CRSP monthly market index
+│   ├── pull_fama_french.py     # WRDS pull: risk-free rate
+│   ├── calc_predictor_data.py  # DATA CLEANING ONLY -&gt; tidy monthly panel
+│   ├── monte_carlo.py          # simulation engine (Table 1 Part A)
+│   ├── stambaugh_bias.py       # bias-corrected estimators (Figure 1)
+│   ├── bayesian.py             # conjugate posteriors (Table 2 specs A, B)
+│   ├── mcmc.py                 # Metropolis-Hastings (Table 2 specs C, D)
+│   ├── create_table_01_partC.py
+│   ├── create_table_01.py      # Table 1 assembly -&gt; _output/*.tex
+│   ├── create_table_02.py      # Table 2 assembly -&gt; _output/*.tex
+│   ├── create_figure_01.py     # Figure 1 -&gt; _output/figure_01.png
+│   ├── 01_walkthrough.ipynb.py # guided tour notebook (jupytext source)
+│   └── test_*.py               # unit tests
+├── reports/report.tex          # the write-up; inputs the generated exhibits
+├── docs_src/                   # site sources (edit these)
+├── docs/                       # BUILT site — generated, served by Pages
+├── _data/                      # pulled and cleaned data (git-ignored)
+└── _output/                    # generated tables, figures (git-ignored)
+</pre></div>
+</div>
+<p>Data cleaning lives in its own file, separate from all analysis. Raw data never
+enters the repository.</p>
+</section>
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>stambaugh<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.12<span class="w"> </span>-y
+conda<span class="w"> </span>activate<span class="w"> </span>stambaugh
+pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+cp<span class="w"> </span>.env.example<span class="w"> </span>.env<span class="w">      </span><span class="c1"># then set WRDS_USERNAME=your_login</span>
+</pre></div>
+</div>
+<p>The first WRDS connection prompts for your password and offers to create a
+<code class="docutils literal notranslate"><span class="pre">.pgpass</span></code> file so later runs are non-interactive. <code class="docutils literal notranslate"><span class="pre">.env</span></code> is git-ignored and must
+never be committed.</p>
+</section>
+<section id="running-it">
+<h2>Running it<a class="headerlink" href="#running-it" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doit
+</pre></div>
+</div>
+<p>That pulls from WRDS, builds the tidy panel, regenerates every table and figure,
+compiles the report, executes the notebook, rebuilds the site, and runs the
+tests. PyDoit tracks dependencies, so re-running rebuilds only what changed.</p>
+<p>Individual stages:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>doit<span class="w"> </span>pull<span class="w">                  </span><span class="c1"># WRDS pulls</span>
+doit<span class="w"> </span>clean_data<span class="w">            </span><span class="c1"># tidy panel</span>
+doit<span class="w"> </span>table_01<span class="w"> </span>figure_01<span class="w">    </span><span class="c1"># paper-sample exhibits</span>
+doit<span class="w"> </span>table_01_updated<span class="w">      </span><span class="c1"># extended-sample exhibits</span>
+doit<span class="w"> </span>notebook<span class="w">              </span><span class="c1"># execute the walkthrough</span>
+doit<span class="w"> </span>compile_latex_docs<span class="w">    </span><span class="c1"># report PDF</span>
+doit<span class="w"> </span>build_chartbook_site<span class="w">  </span><span class="c1"># the published site</span>
+doit<span class="w"> </span>run_pytest<span class="w">            </span><span class="c1"># test suite</span>
+</pre></div>
+</div>
+<p>Note that <code class="docutils literal notranslate"><span class="pre">table_02</span></code> runs eight Metropolis-Hastings chains and takes several
+minutes.</p>
+</section>
+<section id="testing">
+<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest<span class="w"> </span>-q<span class="w"> </span>src/
+</pre></div>
+</div>
+<p>The suite is split deliberately. Simulation-based tests verify the bias
+mechanism itself — that the bias is positive when innovations are negatively
+correlated, vanishes when they are not, shrinks like 1/T, and matches the
+Kendall/Stambaugh analytical formula — and run anywhere, including CI without
+credentials. Data-dependent tests check our estimates against the paper’s
+published values within stated tolerances, and skip with an explanatory message
+when the panel has not been built.</p>
+</section>
+<section id="data-sources">
+<h2>Data sources<a class="headerlink" href="#data-sources" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>CRSP Monthly Stock Market Indexes</strong> (<code class="docutils literal notranslate"><span class="pre">crsp.msi</span></code>, WRDS) — value-weighted
+returns with (<code class="docutils literal notranslate"><span class="pre">vwretd</span></code>) and without (<code class="docutils literal notranslate"><span class="pre">vwretx</span></code>) dividends. Their difference
+gives the dividend series, which is how the dividend–price ratio is
+reconstructed without a separate dividend file.</p></li>
+<li><p><strong>Fama–French monthly factors</strong> (<code class="docutils literal notranslate"><span class="pre">ff.factors_monthly</span></code>, WRDS) — the one-month
+risk-free rate, for continuously compounded excess returns.</p></li>
+</ul>
+<p>Stambaugh uses a NYSE-only value-weighted index; our WRDS instance provides no
+pre-built NYSE-only monthly index carrying both return columns, so we use the
+CRSP total-market value-weighted index and document the choice in the report.</p>
+</section>
+<section id="a-note-on-docs">
+<h2>A note on <code class="docutils literal notranslate"><span class="pre">docs/</span></code><a class="headerlink" href="#a-note-on-docs" title="Link to this heading">#</a></h2>
+<p>The built site is committed so GitHub Pages can serve it directly without a
+build step. Edit <code class="docutils literal notranslate"><span class="pre">docs_src/</span></code>, never <code class="docutils literal notranslate"><span class="pre">docs/</span></code> — the latter is regenerated by
+<code class="docutils literal notranslate"><span class="pre">doit</span> <span class="pre">build_chartbook_site</span></code> and hand edits are lost.</p>
+</section>
+<section id="team">
+<h2>Team<a class="headerlink" href="#team" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Ashish Maheshwari</p></li>
+<li><p>Omar Anabtawi</p></li>
+</ul>
+<p>FINM 32900, Full-Stack Quantitative Finance, Summer 2026.</p>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+   
+</div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="right-next"
+       href="project_overview.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Project Overview</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pipeline-specs">Pipeline Specs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#exhibits">Exhibits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repository-structure">Repository structure</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-it">Running it</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-sources">Data sources</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-note-on-docs">A note on <code class="docutils literal notranslate"><span class="pre">docs/</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#team">Team</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Ashish Maheshwari & Omar Anabtawi
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026, Ashish Maheshwari &amp; Omar Anabtawi.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
