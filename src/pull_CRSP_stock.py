@@ -208,9 +208,6 @@ def _demo():
 
 if __name__ == "__main__":
     df_msf = pull_CRSP_monthly_file(start_date=START_DATE, end_date=END_DATE)
-    path = Path(DATA_DIR) / "CRSP_monthly_stock.parquet"
-    df_msf.to_parquet(path)
-
-    df_msix = pull_CRSP_index_files(start_date=START_DATE, end_date=END_DATE)
-    path = Path(DATA_DIR) / "CRSP_MSIX.parquet"
-    df_msix.to_parquet(path)
+    Path(DATA_DIR).mkdir(parents=True, exist_ok=True)
+    df_msf.to_parquet(Path(DATA_DIR) / "CRSP_monthly_stock.parquet")
+    print(f"Saved {len(df_msf):,} rows to CRSP_monthly_stock.parquet")

@@ -96,8 +96,14 @@ Our WRDS instance provides no pre-built NYSE-only monthly index carrying both
 value-weighted index. Because both are value-weighted, the same
 large-capitalization firms---predominantly NYSE-listed---dominate each, and for
 the first half of the sample the universes effectively coincide, since AMEX
-enters CRSP in 1962 and NASDAQ at the end of 1972. A NYSE-only index rebuilt
-from the stock file is reported separately as a robustness check.
+enters CRSP in 1962 and NASDAQ at the end of 1972. As a robustness check we rebuilt 
+a NYSE-only value-weighted index directly from the CRSP monthly stock file, 
+weighting each security's return by its lagged market capitalization.
+Over the full overlapping sample the two dividend-price
+series correlate at 0.994, and the predictive slopes differ by 0.014
+(0.129 for the total-market index against 0.143 for the NYSE-only index);
+Table~\ref{tab:nyse-index-comparison} reports the comparison. The index choice
+does not materially affect the results.
 
 \section{Replication results}
 
@@ -226,6 +232,8 @@ without help from the prior.
 finite-sample moments, all sixteen Bayesian posterior cells across four
 specifications, and the geometry of Figure 1 reproduce within a few hundredths,
 including the paper's most extreme individual result.
+
+\input{../_output/nyse_index_comparison.tex}
 
 \paragraph{Return definition.} Our initial slopes ran roughly 50\% high in the
 pre-war subsamples. The cause was that we had used simple excess returns while
