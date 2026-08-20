@@ -32,4 +32,5 @@ tenfold.
 project_overview/goals
 project_overview/data_sources
 project_overview/methodology
+project_overview/plain_language_explainer
 ```
