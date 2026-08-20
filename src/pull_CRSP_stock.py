@@ -124,6 +124,7 @@ def pull_CRSP_monthly_file(
     WHERE
         msf.mthcaldt BETWEEN '{start_date}' AND '{end_date}'
         AND ssih.securitytype = 'EQTY'
+        AND ssih.primaryexch = 'N'
     """
     # Note: Using securitytype = 'EQTY' as broad filter to include various equity types.
     # For stricter common-stock-only filtering, add:

@@ -98,6 +98,22 @@ def task_pull():
         "file_dep": ["./src/settings.py", "./src/pull_CRSP_index.py"],
         "clean": [],
     }
+
+    yield {
+        "name": "crsp_stock",
+        "doc": "Pull NYSE stock-level monthly CRSP data from WRDS",
+        "actions": [
+            "python ./src/settings.py",
+            "python ./src/pull_CRSP_stock.py",
+        ],
+        "targets": [
+            DATA_DIR / "CRSP_monthly_stock.parquet",
+            DATA_DIR / "CRSP_MSIX.parquet",
+        ],
+        "file_dep": ["./src/settings.py", "./src/pull_CRSP_stock.py"],
+        "clean": [],
+    }
+
     yield {
         "name": "ff",
         "doc": "Pull Fama-French monthly factors (risk-free rate) from WRDS",
@@ -110,6 +126,7 @@ def task_pull():
         "clean": [],
     }
 
+
 def task_clean_data():
     """Build the tidy predictor panel from the raw pulls."""
     return {
@@ -121,6 +138,28 @@ def task_clean_data():
             DATA_DIR / "ff_factors.parquet",
         ],
         "clean": [],
+    }
+
+
+def task_clean_nyse_index():
+    """Build the NYSE-only value-weighted index and robustness comparison."""
+    return {
+        "actions": ["python ./src/calc_nyse_index.py"],
+        "task_dep": ["pull:crsp_stock", "clean_data"],
+        "targets": [
+            DATA_DIR / "nyse_stock_index.parquet",
+            DATA_DIR / "predictor_panel_nyse.parquet",
+            OUTPUT_DIR / "nyse_index_comparison.tex",
+        ],
+        "file_dep": [
+            "./src/calc_nyse_index.py",
+            "./src/calc_predictor_data.py",
+            "./src/pull_CRSP_stock.py",
+            DATA_DIR / "CRSP_monthly_stock.parquet",
+            DATA_DIR / "ff_factors.parquet",
+            DATA_DIR / "predictor_panel.parquet",
+        ],
+        "clean": True,
     }
 
 def task_table_01():
