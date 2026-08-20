@@ -319,12 +319,16 @@ def task_build_chartbook_site():
     """Build the chartbook static site into ./docs for GitHub Pages."""
 
     def copy_static_assets():
-        # Sphinx may not copy loose non-source files; ensure they ship.
+        # Sphinx does not copy loose non-source files; ensure they ship.
         for f in ["playground.html", "report.pdf"]:
             src = Path("./docs_src/site") / f
             if src.exists():
                 shutil.copy2(src, Path("./docs") / f)
         (Path("./docs") / ".nojekyll").touch()
+
+    # Glob the site sources so adding a page triggers a rebuild. Listing files
+    # individually meant new pages were silently skipped as up-to-date.
+    site_sources = sorted(str(p) for p in Path("./docs_src").rglob("*.md"))
 
     return {
         "actions": [
@@ -333,14 +337,13 @@ def task_build_chartbook_site():
         ],
         "file_dep": [
             "chartbook.toml",
-            "./docs_src/site/index_toc.md",
-            "./docs_src/site/project_overview.md",
+            *site_sources,
+            "./docs_src/site/playground.html",
             OUTPUT_DIR / "01_walkthrough.ipynb",
         ],
         "targets": ["./docs/index.html"],
         "verbosity": 2,
     }
-
 
 def task_run_pytest():
     """Run pytest and save results to OUTPUT_DIR"""
